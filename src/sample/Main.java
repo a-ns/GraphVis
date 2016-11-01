@@ -5,17 +5,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.graphstream.graph.*;
-import org.graphstream.graph.implementations.MultiGraph;
-import org.graphstream.graph.implementations.SingleGraph;
-import org.graphstream.ui.graphicGraph.GraphicEdge;
-
+import Graph.*;
 public class Main extends Application {
 
     private Graph_Canvas_Controller gcc;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+        Graph<Integer> graph = new Graph();
+        graph.addVertex(5);
+
         FXMLLoader graph_canvas_loader = new FXMLLoader();
 
         Parent root = graph_canvas_loader.load(getClass().getResource("Graph_Canvas.fxml").openStream());
