@@ -13,7 +13,7 @@ public class Graph<T> {
     private static int vertexID = 0;
 
     private List<Edge> edges;
-    private LinkedList<Vertex> nodes;
+    private List<Vertex> nodes;
 
     public Graph () {
         this.edges = new LinkedList<>();
@@ -34,12 +34,14 @@ public class Graph<T> {
         }
     }
 
-    public boolean addEdge(T from, T to) {
+    public boolean addEdge(T from, T to, boolean... bidirectional) {
         try {
             if (this.hasVertex(from) && this.hasVertex(to)) {
                 Edge newEdge = new Edge (getVertex(from), getVertex(to));
                 getVertex(from).put(newEdge);
-                getVertex(to).put(newEdge);
+                if (bidirectional[0]) {
+                    getVertex(to).put(new Edge (getVertex(to), getVertex(from)));
+                }
                 this.edges.add(newEdge);
                 return true;
             }
@@ -58,6 +60,72 @@ public class Graph<T> {
         }
         return null;
     }
+
+    public Vertex getVertex (int id) {
+        for (Vertex n : nodes) {
+            if(n.getId() == id){
+                return n;
+            }
+        }
+        return null;
+    }
+
+    public boolean removeVertex(int id) {
+        for (Vertex n : nodes) {
+            if(n.getId() == id) {
+                Iterator<Edge> iterator = n.getEdges().iterator();
+                while(iterator.hasNext()) {
+                    Edge e = iterator.next();
+                    n.removeEdge(e.getId());
+                }
+                nodes.remove(n);
+            }
+            return true;
+        }
+        return false;
+    }
+    public boolean removeVertex(T value) {
+        Iterator<Vertex> vertexIterator = nodes.iterator();
+        while (vertexIterator.hasNext()) {
+            Vertex n = vertexIterator.next();
+            if(n.getValue().equals(value)) {
+
+                Iterator<Edge> iterator = n.getEdges().iterator();
+
+                while(iterator.hasNext()) {
+                    iterator.next();
+                    iterator.remove();
+                }
+
+                Iterator<Vertex> it = this.nodes.iterator();
+                while(it.hasNext()) {
+                    Vertex v = it.next();
+                    iterator = v.getEdges().iterator();
+                    while (iterator.hasNext()) {
+                        Edge e = iterator.next();
+                        if (e.getFrom().getValue().equals(value) || e.getTo().getValue().equals(value)) {
+                            iterator.remove();
+                        }
+
+                    }
+                }
+                vertexIterator.remove();
+                return true;
+            }
+
+        }
+        return false;
+    }
+
+    public Edge getEdge (int id) {
+        for (Edge e : edges) {
+            if (e.getId() == id){
+                return e;
+            }
+        }
+        return null;
+    }
+
 
     public boolean hasVertex(T value) {
         return getVertex(value) != null;
@@ -128,7 +196,7 @@ public class Graph<T> {
 
         @Override
         public String toString() {
-            return "{ id: " + this.id + " , to : " + this.to.value + " , from : " + this.from.value  + " }";
+            return "{ id: " + this.id + " , from : " + this.from.value + " , to : " + this.to.value  + " }";
         }
 
     }
@@ -167,6 +235,18 @@ public class Graph<T> {
         public void put(Edge edge){
             this.edges.add(edge);
         }
+
+        public boolean removeEdge(int id) {
+            Iterator<Edge> edgeIterator = this.edges.iterator();
+            while(edgeIterator.hasNext()) {
+                Edge e = edgeIterator.next();
+                if (e.getId() == id) {
+                    edgeIterator.remove();
+                    return true;
+                }
+            }
+            return false;
+        }
         @Override
         public String toString(){
             return "VERTEX ==>\n" + "{ value : " + this.value + ", ID: " + this.id + "," + '\n' +
@@ -177,7 +257,6 @@ public class Graph<T> {
             if (this.edges.isEmpty()) {
                 return "";
             }
-
             StringBuilder returnString = new StringBuilder();
             for (Edge e : this.edges) {
                 returnString.append("  " + e.toString() + "\n\t\t\t\t  ");
