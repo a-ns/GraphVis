@@ -39,8 +39,9 @@ public class Graph<T> {
             if (this.hasVertex(from) && this.hasVertex(to)) {
                 Edge newEdge = new Edge (getVertex(from), getVertex(to));
                 getVertex(from).put(newEdge);
-                if (bidirectional[0]) {
-                    getVertex(to).put(new Edge (getVertex(to), getVertex(from)));
+                if (bidirectional.length > 0) {
+                    if (bidirectional[0])
+                        getVertex(to).put(new Edge (getVertex(to), getVertex(from)));
                 }
                 this.edges.add(newEdge);
                 return true;
