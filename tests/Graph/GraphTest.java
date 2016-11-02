@@ -27,20 +27,17 @@ public class GraphTest {
 
     }
 
+
+
     @Test
     public void testRemoveVertex() throws Exception {
         Graph<Integer> graph = new Graph<Integer>();
         graph.addVertex(new Integer(5));
+        graph.addVertex(new Integer(10));
+        graph.addEdge(5, 10);
         graph.removeVertex(new Integer(5));
         assertEquals(null, graph.getVertex(new Integer(5)));
-    }
 
-    @Test
-    public void testRemoveVertex1() throws Exception {
-        Graph<Integer> graph = new Graph<Integer>();
-        graph.addVertex(new Integer(5));
-        graph.removeVertex(new Integer(5));
-        assertEquals(null, graph.getVertex(new Integer(5)));
     }
 
     @Test
@@ -49,7 +46,7 @@ public class GraphTest {
         graph.addVertex(new Integer(5));
         graph.addVertex(new Integer(6));
         graph.addEdge(5, 6);
-        assertNotEquals(null, graph.getEdge(1));
+        assertNotEquals(null, graph.getEdge(graph.getVertex(new Integer(5)), graph.getVertex(new Integer(6))));
     }
 
     @Test

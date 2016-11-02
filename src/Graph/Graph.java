@@ -40,8 +40,10 @@ public class Graph<T> {
                 Edge newEdge = new Edge (getVertex(from), getVertex(to));
                 getVertex(from).put(newEdge);
                 if (bidirectional.length > 0) {
-                    if (bidirectional[0])
-                        getVertex(to).put(new Edge (getVertex(to), getVertex(from)));
+                    if (bidirectional[0]) {
+                        this.addEdge(to , from);
+                    }
+
                 }
                 this.edges.add(newEdge);
                 return true;
@@ -71,21 +73,25 @@ public class Graph<T> {
         return null;
     }
 
-    public boolean removeVertex(int id) {
-        for (Vertex n : nodes) {
-            if(n.getId() == id) {
-                Iterator<Edge> iterator = n.getEdges().iterator();
-                while(iterator.hasNext()) {
-                    Edge e = iterator.next();
-                    n.removeEdge(e.getId());
-                }
-                nodes.remove(n);
-            }
-            return true;
-        }
-        return false;
-    }
     public boolean removeVertex(T value) {
+
+        Vertex v = this.getVertex(value);
+        if (v == null) return false;
+        for (Edge e : v.getEdges()) {
+            Vertex otherVertex = e.getTo();
+            Edge edgeBack = this.getEdge(otherVertex, v);
+            if (edgeBack != null) {
+                otherVertex.removeEdge(edgeBack.getId());
+                this.edges.remove(edgeBack);
+            }
+            this.edges.remove(e);
+        }
+        this.nodes.remove(v);
+        return true;
+
+
+
+        /*
         Iterator<Vertex> vertexIterator = nodes.iterator();
         while (vertexIterator.hasNext()) {
             Vertex n = vertexIterator.next();
@@ -116,11 +122,21 @@ public class Graph<T> {
 
         }
         return false;
+        */
     }
 
     public Edge getEdge (int id) {
         for (Edge e : edges) {
             if (e.getId() == id){
+                return e;
+            }
+        }
+        return null;
+    }
+
+    public Edge getEdge (Vertex from, Vertex to){
+        for (Edge e: edges) {
+            if(e.getTo().equals(to) && e.getFrom().equals(from)) {
                 return e;
             }
         }
@@ -137,6 +153,9 @@ public class Graph<T> {
         StringBuilder returnString = new StringBuilder();
         for (Vertex n : nodes) {
             returnString.append(n.toString() + '\n');
+        }
+        for (Edge e : edges) {
+            returnString.append(e.toString() + '\n');
         }
         return returnString.toString();
     }
