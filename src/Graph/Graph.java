@@ -1,7 +1,6 @@
 package Graph;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -14,8 +13,12 @@ public class Graph<T> {
     private static int vertexID = 0;
 
     private List<Edge> edges;
-    private ArrayList<Vertex> nodes;
+    private LinkedList<Vertex> nodes;
 
+    public Graph () {
+        this.edges = new LinkedList<>();
+        this.nodes = new LinkedList<>();
+    }
 
     public boolean addVertex(T value){
         try {
@@ -24,12 +27,52 @@ public class Graph<T> {
             return true;
         }
         catch (Exception e){
+            e.printStackTrace();
             LOGGER.setLevel(Level.WARNING);
             LOGGER.warning("Could not create vertex with value : " + value);
             return false;
         }
     }
 
+    public boolean addEdge(T from, T to) {
+        try {
+            if (this.hasVertex(from) && this.hasVertex(to)) {
+                Edge newEdge = new Edge (getVertex(from), getVertex(to));
+                getVertex(from).put(newEdge);
+                getVertex(to).put(newEdge);
+                this.edges.add(newEdge);
+                return true;
+            }
+            return false;
+        }
+        catch (Exception e) {
+            return false;
+        }
+    }
+
+    public Vertex getVertex (T value) {
+        for (Vertex n : nodes) {
+            if (n.getValue().equals(value)) {
+                return n;
+            }
+        }
+        return null;
+    }
+
+    public boolean hasVertex(T value) {
+        return getVertex(value) != null;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder returnString = new StringBuilder();
+        for (Vertex n : nodes) {
+            returnString.append(n.toString() + '\n');
+        }
+        return returnString.toString();
+    }
+
+    /******************************** INNER CLASS EDGE ******************************/
     private class Edge {
 
 
@@ -39,11 +82,16 @@ public class Graph<T> {
         private int id;
 
 
-        public Edge(int weight, Graph.Vertex from, Graph.Vertex to, int id) {
+        public Edge(int weight, Graph.Vertex from, Graph.Vertex to) {
             this.weight = weight;
             this.from = from;
             this.to = to;
-            this.id = id;
+            this.id = edgeID +=1;
+        }
+        public Edge(Graph.Vertex from, Graph.Vertex to) {
+            this.from = from;
+            this.to = to;
+            this.id = edgeID += 1;
         }
 
         public int getWeight() {
@@ -78,10 +126,13 @@ public class Graph<T> {
             this.id = id;
         }
 
-
+        @Override
+        public String toString() {
+            return "{ id: " + this.id + " , to : " + this.to.value + " , from : " + this.from.value  + " }";
+        }
 
     }
-
+    /******************************** INNER CLASS VERTEX ******************************/
     private class Vertex {
         private T value;
         private int id;
@@ -89,6 +140,8 @@ public class Graph<T> {
 
         public Vertex(T value) {
             this.value = value;
+            this.id = Graph.vertexID += 1;
+            this.edges = new LinkedList<>();
         }
 
         public T getValue() {
@@ -111,8 +164,26 @@ public class Graph<T> {
             return edges;
         }
 
-        public void setEdges(List<Edge> edges) {
-            this.edges = edges;
+        public void put(Edge edge){
+            this.edges.add(edge);
+        }
+        @Override
+        public String toString(){
+            return "VERTEX ==>\n" + "{ value : " + this.value + ", ID: " + this.id + "," + '\n' +
+                    "\t\t edges : {" + this.printEdges() +
+                    "}";
+        }
+        private String printEdges () {
+            if (this.edges.isEmpty()) {
+                return "";
+            }
+
+            StringBuilder returnString = new StringBuilder();
+            for (Edge e : this.edges) {
+                returnString.append("  " + e.toString() + "\n\t\t\t\t  ");
+            }
+            returnString.append("}\n");
+            return returnString.toString();
         }
     }
 }
