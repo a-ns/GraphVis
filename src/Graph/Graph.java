@@ -88,41 +88,6 @@ public class Graph<T> {
         }
         this.nodes.remove(v);
         return true;
-
-
-
-        /*
-        Iterator<Vertex> vertexIterator = nodes.iterator();
-        while (vertexIterator.hasNext()) {
-            Vertex n = vertexIterator.next();
-            if(n.getValue().equals(value)) {
-
-                Iterator<Edge> iterator = n.getEdges().iterator();
-
-                while(iterator.hasNext()) {
-                    iterator.next();
-                    iterator.remove();
-                }
-
-                Iterator<Vertex> it = this.nodes.iterator();
-                while(it.hasNext()) {
-                    Vertex v = it.next();
-                    iterator = v.getEdges().iterator();
-                    while (iterator.hasNext()) {
-                        Edge e = iterator.next();
-                        if (e.getFrom().getValue().equals(value) || e.getTo().getValue().equals(value)) {
-                            iterator.remove();
-                        }
-
-                    }
-                }
-                vertexIterator.remove();
-                return true;
-            }
-
-        }
-        return false;
-        */
     }
 
     public Edge getEdge (int id) {
@@ -132,6 +97,19 @@ public class Graph<T> {
             }
         }
         return null;
+    }
+
+    public boolean removeEdge(Vertex from, Vertex to) {
+        for (Edge e: this.edges){
+            if (e.getFrom().equals(from) && e.getTo().equals(to)) {
+                e.getFrom().removeEdge(e.getId());
+                e.getTo().removeEdge(e.getId());
+                this.edges.remove(e);
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public Edge getEdge (Vertex from, Vertex to){
@@ -283,6 +261,15 @@ public class Graph<T> {
             }
             returnString.append("}\n");
             return returnString.toString();
+        }
+
+        /*
+         * Equality is based on the T value attribute of the vertices. Change it as needed.
+         */
+        public boolean equals(Vertex other) {
+            if (this.value == other.value)
+                return true;
+            return false;
         }
     }
 }
