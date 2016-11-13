@@ -2,8 +2,10 @@ package sample;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import Graph.*;
 public class Main extends Application {
@@ -30,11 +32,13 @@ public class Main extends Application {
 
         FXMLLoader graph_canvas_loader = new FXMLLoader();
 
-        Parent root = graph_canvas_loader.load(getClass().getResource("Graph_Canvas.fxml").openStream());
+        Pane root = graph_canvas_loader.load(getClass().getResource("Graph_Canvas.fxml").openStream());
 
         this.gcc = graph_canvas_loader.getController();
+        this.gcc.setHandlers(root);
         primaryStage.setTitle("Hello World");
         primaryStage.setScene(new Scene(root, 600, 325));
+
         primaryStage.show();
     }
 
