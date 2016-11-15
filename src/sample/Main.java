@@ -12,24 +12,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Graph graph = new Graph();
-        graph.addVertex("5");
-        graph.addVertex("25");
-        graph.addVertex("16");
-        graph.addVertex("100");
 
-        graph.addEdge("100", "5");
-        graph.addEdge("100", "16");
-        graph.addEdge("25", "16", true);
-        graph.addEdge("5", "25", true);
-        graph.addEdge("5", "16");
-
-        graph.removeVertex("100");
-        graph.removeVertex("5");
-        System.out.println(graph);
-
-        Object[][] matrix = graph.toAdjacencyMatrix();
-        System.out.println(matrix[0][0]);
 
         FXMLLoader graph_canvas_loader = new FXMLLoader();
 
