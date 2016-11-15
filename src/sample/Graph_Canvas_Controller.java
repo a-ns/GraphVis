@@ -15,7 +15,7 @@ public class Graph_Canvas_Controller {
 
     @FXML
     private JFXButton bAddOne;
-    private Graph<Integer> graph;
+    private Graph graph;
     private Stage stage;
     private Pane root;
 
@@ -23,7 +23,7 @@ public class Graph_Canvas_Controller {
 
     @FXML
     public void initialize () {
-        this.graph = new Graph<Integer>();
+        this.graph = new Graph();
     }
 
     public void setParent(Pane root){

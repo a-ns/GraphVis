@@ -52,7 +52,6 @@ public class Graph {
         return toAdd;
     }
 
-    public boolean addEdge(String from, String to, boolean... bidirectional) {
     /**
      * Add edge boolean.
      *
