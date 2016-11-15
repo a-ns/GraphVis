@@ -37,6 +37,12 @@ public class Graph<T> {
         }
     }
 
+    public Vertex addVertex(double x, double y, double radius) {
+        Vertex toAdd = new Vertex(x, y, radius);
+        this.nodes.add(toAdd);
+        return toAdd;
+    }
+
     public boolean addEdge(T from, T to, boolean... bidirectional) {
         try {
             if (this.hasVertex(from) && this.hasVertex(to)) {
@@ -208,7 +214,12 @@ public class Graph<T> {
             this.value = value;
             super.setId(String.valueOf(Graph.vertexID+=1));
             this.edges = new LinkedList<>();
+        }
 
+        public Vertex(double x, double y, double radius){
+            super(x, y, radius);
+            super.setId(String.valueOf(Graph.vertexID+=1));
+            this.edges = new LinkedList<>();
         }
 
         public T getValue() {
