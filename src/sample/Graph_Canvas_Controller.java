@@ -54,6 +54,7 @@ public class Graph_Canvas_Controller {
                 double yVal = event.getSceneY();
                 Circle circ = new Circle(xVal, yVal, 10);
                 circ.setOnMouseDragged(e -> {
+
                     circ.setCenterX(e.getSceneX());
                     circ.setCenterY(e.getSceneY());
                 });

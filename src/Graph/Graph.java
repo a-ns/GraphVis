@@ -1,5 +1,8 @@
 package Graph;
 
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
+
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -66,7 +69,7 @@ public class Graph<T> {
 
     public Vertex getVertex (int id) {
         for (Vertex n : nodes) {
-            if(n.getId() == id){
+            if(n.getId().equals(String.valueOf(id))){
                 return n;
             }
         }
@@ -74,14 +77,13 @@ public class Graph<T> {
     }
 
     public boolean removeVertex(T value) {
-
         Vertex v = this.getVertex(value);
         if (v == null) return false;
         for (Edge e : v.getEdges()) {
             Vertex otherVertex = e.getTo();
             Edge edgeBack = this.getEdge(otherVertex, v);
             if (edgeBack != null) {
-                otherVertex.removeEdge(edgeBack.getId());
+                otherVertex.removeEdge(Integer.valueOf(edgeBack.getId()));
                 this.edges.remove(edgeBack);
             }
             this.edges.remove(e);
@@ -92,7 +94,7 @@ public class Graph<T> {
 
     public Edge getEdge (int id) {
         for (Edge e : edges) {
-            if (e.getId() == id){
+            if (e.getId().equals(String.valueOf(id))){
                 return e;
             }
         }
@@ -102,8 +104,8 @@ public class Graph<T> {
     public boolean removeEdge(Vertex from, Vertex to) {
         for (Edge e: this.edges){
             if (e.getFrom().equals(from) && e.getTo().equals(to)) {
-                e.getFrom().removeEdge(e.getId());
-                e.getTo().removeEdge(e.getId());
+                e.getFrom().removeEdge(Integer.valueOf(e.getId()));
+                e.getTo().removeEdge(Integer.valueOf(e.getId()));
                 this.edges.remove(e);
                 return true;
             }
@@ -139,25 +141,25 @@ public class Graph<T> {
     }
 
     /******************************** INNER CLASS EDGE ******************************/
-    private class Edge {
+    private class Edge extends Line {
 
 
         private int weight;
         private Vertex from;
         private Vertex to;
-        private int id;
 
 
         public Edge(int weight, Graph.Vertex from, Graph.Vertex to) {
+            super ();
             this.weight = weight;
             this.from = from;
             this.to = to;
-            this.id = edgeID +=1;
+            super.setId(String.valueOf(edgeID+=1));
         }
         public Edge(Graph.Vertex from, Graph.Vertex to) {
             this.from = from;
             this.to = to;
-            this.id = edgeID += 1;
+            super.setId(String.valueOf(edgeID+=1));
         }
 
         public int getWeight() {
@@ -184,30 +186,29 @@ public class Graph<T> {
             this.to = to;
         }
 
-        public int getId() {
-            return id;
-        }
 
         public void setId(int id) {
-            this.id = id;
+            super.setId(String.valueOf(edgeID+=1));
         }
 
         @Override
         public String toString() {
-            return "{ id: " + this.id + " , from : " + this.from.value + " , to : " + this.to.value  + " }";
+            return "{ id: " + super.getId() + " , from : " + this.from.value + " , to : " + this.to.value  + " }";
         }
 
     }
     /******************************** INNER CLASS VERTEX ******************************/
-    private class Vertex {
+    private class Vertex extends Circle {
         private T value;
-        private int id;
         private List<Edge> edges;
 
+
         public Vertex(T value) {
+            super();
             this.value = value;
-            this.id = Graph.vertexID += 1;
+            super.setId(String.valueOf(Graph.vertexID+=1));
             this.edges = new LinkedList<>();
+
         }
 
         public T getValue() {
@@ -218,12 +219,9 @@ public class Graph<T> {
             this.value = value;
         }
 
-        public int getId() {
-            return id;
-        }
 
         public void setId(int id) {
-            this.id = id;
+            super.setId(String.valueOf(id));
         }
 
         public List<Edge> getEdges() {
@@ -238,7 +236,7 @@ public class Graph<T> {
             Iterator<Edge> edgeIterator = this.edges.iterator();
             while(edgeIterator.hasNext()) {
                 Edge e = edgeIterator.next();
-                if (e.getId() == id) {
+                if (e.getId().equals(String.valueOf(id))) {
                     edgeIterator.remove();
                     return true;
                 }
@@ -247,7 +245,7 @@ public class Graph<T> {
         }
         @Override
         public String toString(){
-            return "VERTEX ==>\n" + "{ value : " + this.value + ", ID: " + this.id + "," + '\n' +
+            return "VERTEX ==>\n" + "{ value : " + this.value + ", ID: " + super.getId() + "," + '\n' +
                     "\t\t edges : {" + this.printEdges() +
                     "}";
         }
