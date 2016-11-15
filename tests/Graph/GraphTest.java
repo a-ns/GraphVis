@@ -11,15 +11,15 @@ public class GraphTest {
 
     @Test
     public void testAddVertex() throws Exception {
-        Graph<Integer> graph = new Graph<Integer>();
+        Graph graph = new Graph();
         assertNotEquals(null, graph);
     }
 
     @Test
     public void testGetVertex() throws Exception {
-        Graph<Integer> graph = new Graph<Integer>();
-        graph.addVertex(new Integer(5));
-        assertNotEquals(null, graph.getVertex(new Integer(5)));
+        Graph graph = new Graph();
+        graph.addVertex("5");
+        assertNotEquals(null, graph.getVertex("5"));
     }
 
     @Test
@@ -31,28 +31,28 @@ public class GraphTest {
 
     @Test
     public void testRemoveVertex() throws Exception {
-        Graph<Integer> graph = new Graph<Integer>();
-        graph.addVertex(new Integer(5));
-        graph.addVertex(new Integer(10));
-        graph.addEdge(5, 10);
-        graph.removeVertex(new Integer(5));
-        assertEquals(null, graph.getVertex(new Integer(5)));
+        Graph graph = new Graph();
+        graph.addVertex("5");
+        graph.addVertex("10");
+        graph.addEdge("5", "10");
+        graph.removeVertex("5");
+        assertEquals(null, graph.getVertex("5"));
 
     }
 
     @Test
     public void testGetEdge() throws Exception {
-        Graph<Integer> graph = new Graph<Integer>();
-        graph.addVertex(new Integer(5));
-        graph.addVertex(new Integer(6));
-        graph.addEdge(5, 6);
-        assertNotEquals(null, graph.getEdge(graph.getVertex(new Integer(5)), graph.getVertex(new Integer(6))));
+        Graph graph = new Graph();
+        graph.addVertex("5");
+        graph.addVertex("6");
+        graph.addEdge("5", "6");
+        assertNotEquals(null, graph.getEdge(graph.getVertex("5"), graph.getVertex("6")));
     }
 
     @Test
     public void testHasVertex() throws Exception {
-        Graph<Integer> graph = new Graph<Integer>();
-        graph.addVertex(new Integer(5));
-        assertNotEquals(null, graph.getVertex(new Integer(5)));
+        Graph graph = new Graph();
+        graph.addVertex("5");
+        assertNotEquals(null, graph.getVertex("5"));
     }
 }

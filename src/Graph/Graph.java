@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 /**
  * Created by Alex on 11/1/2016.
  */
-public class Graph<T> {
+public class Graph {
     private final static Logger LOGGER = Logger.getLogger(Graph.class.getName());
     private static int edgeID = 0;
     private static int vertexID = 0;
@@ -15,12 +15,21 @@ public class Graph<T> {
     private List<Edge> edges;
     private List<Vertex> nodes;
 
+    /**
+     * Instantiates a new Graph.
+     */
     public Graph () {
         this.edges = new LinkedList<>();
         this.nodes = new LinkedList<>();
     }
 
-    public boolean addVertex(T value){
+    /**
+     * Add vertex boolean.
+     *
+     * @param value the value
+     * @return the boolean
+     */
+    public boolean addVertex(String value){
         try {
             Vertex toAdd = new Vertex(value);
             this.nodes.add(toAdd);
@@ -34,7 +43,15 @@ public class Graph<T> {
         }
     }
 
-    public boolean addEdge(T from, T to, boolean... bidirectional) {
+    /**
+     * Add edge boolean.
+     *
+     * @param from          the from
+     * @param to            the to
+     * @param bidirectional the bidirectional
+     * @return the boolean
+     */
+    public boolean addEdge(String from, String to, boolean... bidirectional) {
         try {
             if (this.hasVertex(from) && this.hasVertex(to)) {
                 Edge newEdge = new Edge (getVertex(from), getVertex(to));
@@ -55,7 +72,13 @@ public class Graph<T> {
         }
     }
 
-    public Vertex getVertex (T value) {
+    /**
+     * Gets vertex.
+     *
+     * @param value the value
+     * @return the vertex
+     */
+    public Vertex getVertex (String value) {
         for (Vertex n : nodes) {
             if (n.getValue().equals(value)) {
                 return n;
@@ -64,6 +87,12 @@ public class Graph<T> {
         return null;
     }
 
+    /**
+     * Gets vertex.
+     *
+     * @param id the id
+     * @return the vertex
+     */
     public Vertex getVertex (int id) {
         for (Vertex n : nodes) {
             if(n.getId() == id){
@@ -73,7 +102,13 @@ public class Graph<T> {
         return null;
     }
 
-    public boolean removeVertex(T value) {
+    /**
+     * Remove vertex boolean.
+     *
+     * @param value the value
+     * @return the boolean
+     */
+    public boolean removeVertex(String value) {
 
         Vertex v = this.getVertex(value);
         if (v == null) return false;
@@ -90,6 +125,12 @@ public class Graph<T> {
         return true;
     }
 
+    /**
+     * Gets edge.
+     *
+     * @param id the id
+     * @return the edge
+     */
     public Edge getEdge (int id) {
         for (Edge e : edges) {
             if (e.getId() == id){
@@ -99,6 +140,13 @@ public class Graph<T> {
         return null;
     }
 
+    /**
+     * Remove edge boolean.
+     *
+     * @param from the from
+     * @param to   the to
+     * @return the boolean
+     */
     public boolean removeEdge(Vertex from, Vertex to) {
         for (Edge e: this.edges){
             if (e.getFrom().equals(from) && e.getTo().equals(to)) {
@@ -112,6 +160,13 @@ public class Graph<T> {
         return false;
     }
 
+    /**
+     * Get edge edge.
+     *
+     * @param from the from
+     * @param to   the to
+     * @return the edge
+     */
     public Edge getEdge (Vertex from, Vertex to){
         for (Edge e: edges) {
             if(e.getTo().equals(to) && e.getFrom().equals(from)) {
@@ -122,7 +177,13 @@ public class Graph<T> {
     }
 
 
-    public boolean hasVertex(T value) {
+    /**
+     * Has vertex boolean.
+     *
+     * @param value the value
+     * @return the boolean
+     */
+    public boolean hasVertex(String value) {
         return getVertex(value) != null;
     }
 
@@ -138,6 +199,22 @@ public class Graph<T> {
         return returnString.toString();
     }
 
+    /**
+     * To adjacency matrix edge [ ] [ ].
+     *
+     * @return the edge [ ] [ ]
+     */
+    public Edge[][] toAdjacencyMatrix(){
+        int count = this.nodes.size();
+        Edge[][] matrix = new Edge[count][count];
+        for(int i = 0; i < count; i++) {
+            for(int j = 0; j < count; j++){
+                matrix[i][j] = this.getEdge(this.nodes.get(i), this.nodes.get(j));
+            }
+        }
+        return matrix;
+    }
+
     /******************************** INNER CLASS EDGE ******************************/
     private class Edge {
 
@@ -148,92 +225,188 @@ public class Graph<T> {
         private int id;
 
 
+        /**
+         * Instantiates a new Edge.
+         *
+         * @param weight the weight
+         * @param from   the from
+         * @param to     the to
+         */
         public Edge(int weight, Graph.Vertex from, Graph.Vertex to) {
             this.weight = weight;
             this.from = from;
             this.to = to;
             this.id = edgeID +=1;
         }
+
+        /**
+         * Instantiates a new Edge.
+         *
+         * @param from the from
+         * @param to   the to
+         */
         public Edge(Graph.Vertex from, Graph.Vertex to) {
+            this.weight = 0;
             this.from = from;
             this.to = to;
             this.id = edgeID += 1;
         }
 
+        /**
+         * Gets weight.
+         *
+         * @return weight
+         */
         public int getWeight() {
             return weight;
         }
 
+        /**
+         * Sets weight.
+         *
+         * @param weight the weight
+         */
         public void setWeight(int weight) {
             this.weight = weight;
         }
 
+        /**
+         * Gets from.
+         *
+         * @return from
+         */
         public Vertex getFrom() {
             return from;
         }
 
+        /**
+         * Sets from.
+         *
+         * @param from the from
+         */
         public void setFrom(Vertex from) {
             this.from = from;
         }
 
+        /**
+         * Gets to.
+         *
+         * @return to
+         */
         public Vertex getTo() {
             return to;
         }
 
+        /**
+         * Sets to.
+         *
+         * @param to the to
+         */
         public void setTo(Vertex to) {
             this.to = to;
         }
 
+        /**
+         * Gets id.
+         *
+         * @return the id
+         */
         public int getId() {
             return id;
         }
 
+        /**
+         * Sets id.
+         *
+         * @param id the id
+         */
         public void setId(int id) {
             this.id = id;
         }
 
         @Override
         public String toString() {
-            return "{ id: " + this.id + " , from : " + this.from.value + " , to : " + this.to.value  + " }";
+            return "{ id: " + this.id + " , from : " + this.from.value + " , to : " + this.to.value  + " , weight: " + this.weight + "}";
         }
 
     }
     /******************************** INNER CLASS VERTEX ******************************/
     private class Vertex {
-        private T value;
+        private String value;
         private int id;
         private List<Edge> edges;
 
-        public Vertex(T value) {
+        /**
+         * Instantiates a new Vertex.
+         *
+         * @param value the value
+         */
+        public Vertex(String value) {
             this.value = value;
             this.id = Graph.vertexID += 1;
             this.edges = new LinkedList<>();
         }
 
-        public T getValue() {
+        /**
+         * Gets value.
+         *
+         * @return the value
+         */
+        public String getValue() {
             return value;
         }
 
-        public void setValue(T value) {
+        /**
+         * Sets value.
+         *
+         * @param value the value
+         */
+        public void setValue(String value) {
             this.value = value;
         }
 
+        /**
+         * Gets id.
+         *
+         * @return the id
+         */
         public int getId() {
             return id;
         }
 
+        /**
+         * Sets id.
+         *
+         * @param id the id
+         */
         public void setId(int id) {
             this.id = id;
         }
 
+        /**
+         * Gets edges.
+         *
+         * @return the edges
+         */
         public List<Edge> getEdges() {
             return edges;
         }
 
+        /**
+         * Put.
+         *
+         * @param edge the edge
+         */
         public void put(Edge edge){
             this.edges.add(edge);
         }
 
+        /**
+         * Remove edge boolean.
+         *
+         * @param id the id
+         * @return the boolean
+         */
         public boolean removeEdge(int id) {
             Iterator<Edge> edgeIterator = this.edges.iterator();
             while(edgeIterator.hasNext()) {
@@ -263,11 +436,17 @@ public class Graph<T> {
             return returnString.toString();
         }
 
-        /*
+        /**
+         * Equals boolean.
+         *
+         * @param other the other
+         * @return the boolean
+         */
+/*
          * Equality is based on the T value attribute of the vertices. Change it as needed.
          */
         public boolean equals(Vertex other) {
-            if (this.value == other.value)
+            if (this.value.equals( other.value))
                 return true;
             return false;
         }
