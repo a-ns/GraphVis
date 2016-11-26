@@ -20,6 +20,8 @@ public class DepthFirstSearch{
 		for(int i = 0; i < adjMatrix[0].length; i++){
 			if(!visited[i] && adjMatrix[startID][i] != 0){
 				depthFirstSearch(adjMatrix, )
+
+						//doesn't work
 			}
 		}
 	}
