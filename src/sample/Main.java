@@ -19,7 +19,8 @@ public class Main extends Application {
         Pane root = graph_canvas_loader.load(getClass().getResource("Graph_Canvas.fxml").openStream());
 
         this.gcc = graph_canvas_loader.getController();
-        this.gcc.setHandlers(root);
+        this.gcc.setParent(root);
+        this.gcc.setHandlers();
         primaryStage.setTitle("Hello World");
         primaryStage.setScene(new Scene(root, 600, 325));
 

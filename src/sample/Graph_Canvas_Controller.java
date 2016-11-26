@@ -15,6 +15,8 @@ public class Graph_Canvas_Controller {
 
     @FXML
     private JFXButton bAddOne;
+    @FXML
+    private JFXButton clear;
     private Graph graph;
     private Stage stage;
     private Pane root;
@@ -29,12 +31,9 @@ public class Graph_Canvas_Controller {
     public void setParent(Pane root){
         this.root = root;
     }
-    public Button getbAddOne() {
-        return bAddOne;
-    }
 
 
-    public void setHandlers (Pane root) {
+    public void setHandlers () {
         this.bAddOne.setOnMouseClicked( e -> {
             if (!addMode){
                 this.bAddOne.setText("Add Nodes Mode");
@@ -45,7 +44,12 @@ public class Graph_Canvas_Controller {
                 this.addMode = !this.addMode;
             }
         });
-        root.setOnMouseClicked( (MouseEvent event) -> {
+        this.clear.setOnMouseClicked( e-> {
+            this.root.getChildren().removeAll(this.graph.getEdges());
+            this.root.getChildren().removeAll(this.graph.getVertices());
+            this.graph = new Graph();
+        });
+        this.root.setOnMouseClicked( (MouseEvent event) -> {
             if(addMode) {
                 double xVal = event.getSceneX();
                 double yVal = event.getSceneY();
@@ -54,7 +58,7 @@ public class Graph_Canvas_Controller {
                     circ.setCenterX(e.getSceneX());
                     circ.setCenterY(e.getSceneY());
                 });
-                root.getChildren().add(circ);
+                this.root.getChildren().add(circ);
                 System.out.println(this.graph);
             }
         });

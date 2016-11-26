@@ -26,6 +26,13 @@ public class Graph {
         this.nodes = new LinkedList<>();
     }
 
+    public List<Edge> getEdges () {
+        return this.edges;
+    }
+
+    public List<Vertex> getVertices () {
+        return this.nodes;
+    }
     /**
      * Add vertex boolean.
      *

@@ -17,6 +17,7 @@
       <AnchorPane prefHeight="325.0" prefWidth="600.0">
          <children>
                 <JFXButton fx:id="bAddOne" buttonType="RAISED" layoutX="14.0" layoutY="14.0" ripplerFill="WHITE" style="-fx-background-color: #2196F3;" text="Not Add Mode" />
+            <JFXButton fx:id="clear" buttonType="RAISED" layoutX="14.0" layoutY="68.0" prefHeight="25.0" prefWidth="96.0" style="-fx-background-color: #2196F3;" text="Clear" />
          </children>
       </AnchorPane>
       </children>
