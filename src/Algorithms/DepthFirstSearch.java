@@ -14,7 +14,7 @@ public class DepthFirstSearch{
 	private Edge[][] newMatrix;
 	private ArrayList<Graph> states;
 	
-	public DepthFirstSearch(Graph g, int startID, Vertex startNode){
+	public DepthFirstSearch(Graph g, Vertex startNode){
 		visitedNodes = "";
 		currentState = g;
 		this.adjMatrix = g.toAdjacencyMatrix();
@@ -24,7 +24,7 @@ public class DepthFirstSearch{
 	}
 	private void depthFirstSearch(Edge[][] adjMatrix, Vertex startNode){
 		int currentNodeIndex = currentState.getVertices().indexOf(startNode);
-		visitedNodes = visitedNodes + startNode.getValue();
+		visitedNodes = visitedNodes + " " + startNode.getValue();
 		visited[currentNodeIndex] = true;
 		for(int i = 0; i < adjMatrix[0].length; i++){
 			if(!visited[i] && adjMatrix[currentNodeIndex][i] != null){

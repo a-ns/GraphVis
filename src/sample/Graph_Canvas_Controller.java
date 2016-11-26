@@ -14,9 +14,9 @@ public class Graph_Canvas_Controller {
 
 
     @FXML
-    private JFXButton bAddOne;
+    private Button bAddOne;
     @FXML
-    private JFXButton clear;
+    private Button clear;
     private Graph graph;
     private Stage stage;
     private Pane root;
@@ -36,7 +36,7 @@ public class Graph_Canvas_Controller {
     public void setHandlers () {
         this.bAddOne.setOnMouseClicked( e -> {
             if (!addMode){
-                this.bAddOne.setText("Add Nodes Mode");
+                this.bAddOne.setText("Add Nodes");
                 this.addMode = !this.addMode;
             }
             else {
