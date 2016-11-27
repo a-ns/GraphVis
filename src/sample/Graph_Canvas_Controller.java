@@ -67,63 +67,6 @@ public class Graph_Canvas_Controller {
 
 
     public void setHandlers () {
-        setEscapeKey();
-        setbAddOneEvent();
-        setClearClick();
-        setAlgSelect();
-        setRunAlg();
-
-        setPaneClicked();
-        setAddEdges();
-    }
-
-
-
-
-    public void setbAddOne(JFXButton bAddOne) {
-        this.bAddOne = bAddOne;
-    }
-
-    public void addEdge(){
-        
-        this.messageBox.setText("Select a starting node for the edge.");
-        //wait for them to select a starting node
-        this.messageBox.setText("Select an ending node for the edge.");
-        //wait for them to select an ending node
-        this.messageBox.setText("Edge created! To add more edges, select another starting node.");
-
-    }
-    public void setGraph (Graph graph) {
-        this.graph = graph;
-    }
-    public Graph getGraph() {
-        return this.graph;
-    }
-    public void setStage(Stage stage){
-        this.stage = stage;
-    }
-    public Stage getStage() {
-        return this.stage;
-    }
-
-    public void setupChoice() {
-        algSelect.setLayoutX(14);
-        algSelect.setLayoutY(287);
-        algSelect.setMinWidth(108);
-        algSelect.setPrefWidth(108);
-        root.getChildren().add(algSelect);
-    }
-
-    private void setClearClick () {
-        this.clear.setOnMouseClicked( e-> {
-            this.root.getChildren().removeAll(this.graph.getEdges());
-            this.root.getChildren().removeAll(this.graph.getVertices());
-            this.graph = new Graph();
-            this.messageBox.setText("Graph cleared. Create a new graph by adding new nodes!");
-        });
-    }
-
-    private void setEscapeKey () {
         this.root.setOnKeyPressed(e->{
             if (e.getCode() == KeyCode.ESCAPE) {
                 addVertMode = false;
@@ -132,26 +75,30 @@ public class Graph_Canvas_Controller {
                 this.messageBox.setText("No Mode Selected");
             }
         });
-    }
-
-    private void setbAddOneEvent () {
         this.bAddOne.setOnMouseClicked( e -> {
             //this.bAddOne.setText("Add Nodes");
             this.messageBox.setText("Add nodes by selecting a location on the graph and entering in a value.");
             this.addVertMode = true;
             this.addEdgeMode = false;
-        });
-    }
+            /*
+            else {
+                this.bAddOne.setText("Not add Nodes Mode");
+                this.addVertMode = !this.addVertMode;
+            }
+            */
 
-    private void setAlgSelect () {
+        });
+        this.clear.setOnMouseClicked( e-> {
+            this.root.getChildren().removeAll(this.graph.getEdges());
+            this.root.getChildren().removeAll(this.graph.getVertices());
+            this.graph = new Graph();
+            this.messageBox.setText("Graph cleared. Create a new graph by adding new nodes!");
+        });
         this.algSelect.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>(){
             public void changed(ObservableValue ov, Number value, Number new_value){
                 currentAlgorithm = algorithms[new_value.intValue()];
             }
         });
-    }
-
-    private void setRunAlg () {
         this.bRunAlg.setOnMouseClicked(e-> {
             //run the currentAlgorithm
             if(currentAlgorithm.equals("dfs")){
@@ -178,23 +125,6 @@ public class Graph_Canvas_Controller {
                 //run dijkstras
             }
         });
-    }
-
-    private void setAddEdges () {
-        this.bAddEdges.setOnMouseClicked( (MouseEvent event) -> {
-            addEdgeMode = true;
-            addVertMode = false;
-            firstNodeSelected = false;
-            firstNode = "";
-
-            this.messageBox.setText("Select a starting node for the edge.");
-
-            //addEdge();
-        });
-    }
-
-    private void setPaneClicked () {
-
         this.root.setOnMouseClicked( (MouseEvent event) -> {
             if(addVertMode) {
                 double xVal = event.getSceneX();
@@ -223,22 +153,16 @@ public class Graph_Canvas_Controller {
                 System.out.println(closestDistance + "");
 
                 if(closestDistance == -1) {
+                    TextInputDialog dialog = new TextInputDialog("");
+                    dialog.setTitle("Vertex Name");
+                    //dialog.setHeaderText("Look, a Text Input Dialog");
+                    dialog.setContentText("Please enter the vertex name:");
 
+                    // Traditional way to get the response value.
+                    String result = dialog.showAndWait().orElse("n/a");
+                    if (result.matches("^[a-zA-Z0-9]*$") && this.graph.getVertex(result) == null) {
                         Vertex circ = this.graph.addVertex(xVal, yVal, 10);
-                        circ.setOnMouseClicked(click->{
-                            if (click.getClickCount() == 2) {
-                                TextInputDialog dialog = new TextInputDialog("");
-                                dialog.setTitle("Vertex Name");
-                                //dialog.setHeaderText("Look, a Text Input Dialog");
-                                dialog.setContentText("Please enter the vertex name:");
-
-                                // Traditional way to get the response value.
-                                String result = dialog.showAndWait().orElse("n/a");
-
-                                circ.setValue(result);
-                            }
-                        });
-
+                        circ.setValue(result);
                         circ.setOnMouseDragged(e -> {
                             circ.setCenterX(e.getSceneX());
                             circ.setCenterY(e.getSceneY());
@@ -258,7 +182,7 @@ public class Graph_Canvas_Controller {
                         System.out.println(this.graph);
 
                     }
-
+                }
             }
             else if(addEdgeMode) {
                 double xVal = event.getSceneX();
@@ -317,5 +241,51 @@ public class Graph_Canvas_Controller {
                 System.out.println(this.graph);
             }
         });
+        this.bAddEdges.setOnMouseClicked( (MouseEvent event) -> {
+            addEdgeMode = true;
+            addVertMode = false;
+            firstNodeSelected = false;
+            firstNode = "";
+
+            this.messageBox.setText("Select a starting node for the edge.");
+
+            //addEdge();
+        });
+    }
+
+
+
+
+    public void setbAddOne(JFXButton bAddOne) {
+        this.bAddOne = bAddOne;
+    }
+    public void addEdge(){
+        
+        this.messageBox.setText("Select a starting node for the edge.");
+        //wait for them to select a starting node
+        this.messageBox.setText("Select an ending node for the edge.");
+        //wait for them to select an ending node
+        this.messageBox.setText("Edge created! To add more edges, select another starting node.");
+
+    }
+    public void setGraph (Graph graph) {
+        this.graph = graph;
+    }
+    public Graph getGraph() {
+        return this.graph;
+    }
+    public void setStage(Stage stage){
+        this.stage = stage;
+    }
+    public Stage getStage() {
+        return this.stage;
+    }
+
+    public void setupChoice() {
+        algSelect.setLayoutX(14);
+        algSelect.setLayoutY(287);
+        algSelect.setMinWidth(108);
+        algSelect.setPrefWidth(108);
+        root.getChildren().add(algSelect);
     }
 }
