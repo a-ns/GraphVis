@@ -15,7 +15,7 @@ public class BreadthFirstSearch {
     private String visitedNodes;
     public Graph currentState;
     private boolean[] visited;
-    private ArrayList<Graph> states;
+    private ArrayList<ColorMatrix> states;
 
     public BreadthFirstSearch(Graph g, int startID, Vertex startNode){
         queue = new LinkedList<Vertex>();
