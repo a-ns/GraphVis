@@ -160,7 +160,7 @@ public class Graph_Canvas_Controller {
 
                     // Traditional way to get the response value.
                     String result = dialog.showAndWait().orElse("n/a");
-                    if (result.matches("^[a-zA-Z0-9]*$") && this.graph.getVertex(result) == null) {
+                    if (result.matches("^[a-zA-Z0-9]*$") && this.graph.getVertex(result) == null && result.length() > 0) {
                         Vertex circ = this.graph.addVertex(xVal, yVal, 10);
                         circ.setValue(result);
                         circ.setOnMouseDragged(e -> {
