@@ -157,6 +157,16 @@ public class Graph_Canvas_Controller {
                         circ.setOnMouseDragged(e -> {
                             circ.setCenterX(e.getSceneX());
                             circ.setCenterY(e.getSceneY());
+                            for(Edge edge: graph.getEdges()){
+                                if (edge.getFrom() == circ ) {
+                                    edge.setStartX(circ.getCenterX());
+                                    edge.setStartY(circ.getCenterY());
+                                }
+                                else if(edge.getTo() == circ) {
+                                    edge.setEndX(circ.getCenterX());
+                                    edge.setEndY(circ.getCenterY());
+                                }
+                            }
                         });
                         this.root.getChildren().add(circ);
                         nodeNum++;
