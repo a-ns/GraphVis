@@ -1,8 +1,11 @@
 package sample;
 
+import Algorithms.DepthFirstSearch;
 import Graph.*;
 import Graph.Vertex;
 import com.jfoenix.controls.JFXButton;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
@@ -11,6 +14,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
@@ -28,10 +32,13 @@ public class Graph_Canvas_Controller {
     @FXML
     private Button clear;
     @FXML
+    private Button bRunAlg;
+    @FXML
     private Label messageBox;
     @FXML
     private ChoiceBox algSelect;
     private Graph graph;
+    final String[] algorithms = new String[]{"dfs", "bfs", "kruskals"};
     private String currentAlgorithm;
     private Stage stage;
     private Pane root;
@@ -70,12 +77,40 @@ public class Graph_Canvas_Controller {
                 this.addVertMode = !this.addVertMode;
             }
             */
+
         });
         this.clear.setOnMouseClicked( e-> {
             this.root.getChildren().removeAll(this.graph.getEdges());
             this.root.getChildren().removeAll(this.graph.getVertices());
             this.graph = new Graph();
             this.messageBox.setText("Graph cleared. Create a new graph by adding new nodes!");
+        });
+        this.algSelect.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>(){
+            public void changed(ObservableValue ov, Number value, Number new_value){
+                currentAlgorithm = algorithms[new_value.intValue()];
+            }
+        });
+        this.bRunAlg.setOnMouseClicked(e-> {
+            //run the currentAlgorithm
+            if(currentAlgorithm.equals("dfs")){
+                //run dfs
+                //ASK TO SPECIFY START NODE, then pass in that vertex to DFS
+                Vertex start =
+                DepthFirstSearch dfs = new DepthFirstSearch(this.graph, start);
+                //for loop for showing the states stored in dfs as a list of graphs.
+                //draw graph in the for loop for the length of the list
+                //if they want to step, just wait for next mouse click on next arrow to show the step. do it in a while loop.
+                //while not reached final step, show current graph and wait for a mouseclick on either "next" or "play to end" or something
+            }
+            else if(currentAlgorithm.equals("bfs")){
+                //run bfs
+            }
+            else if(currentAlgorithm.equals("kruskals")){
+                //run kruskals
+            }
+            else if(currentAlgorithm.equals("dijkstras")){
+                //run dijkstras
+            }
         });
         this.root.setOnMouseClicked( (MouseEvent event) -> {
             if(addVertMode) {
@@ -156,7 +191,7 @@ public class Graph_Canvas_Controller {
                     this.messageBox.setText("Select an ending node for the edge.");
                 }
                 else if(closestCircle.length() > 0){
-                    TextInputDialog dialog = new TextInputDialog("walter");
+                    TextInputDialog dialog = new TextInputDialog("1");
                     dialog.setTitle("Edge Weight");
                     //dialog.setHeaderText("Look, a Text Input Dialog");
                     dialog.setContentText("Please the edge weight:");
@@ -165,6 +200,7 @@ public class Graph_Canvas_Controller {
                     String result = dialog.showAndWait().orElse("n/a");
                     if (result.matches("^[1-9]\\d*$")){
                         Edge edge = this.graph.addEdge(firstNode, closestCircle, true);
+
                         if (edge != null)
                             this.root.getChildren().add(edge);
                         firstNodeSelected = false;
@@ -196,6 +232,7 @@ public class Graph_Canvas_Controller {
 
 
 
+
     public void setbAddOne(JFXButton bAddOne) {
         this.bAddOne = bAddOne;
     }
@@ -219,5 +256,13 @@ public class Graph_Canvas_Controller {
     }
     public Stage getStage() {
         return this.stage;
+    }
+
+    public void setupChoice() {
+        algSelect.setLayoutX(14);
+        algSelect.setLayoutY(287);
+        algSelect.setMinWidth(108);
+        algSelect.setPrefWidth(108);
+        root.getChildren().add(algSelect);
     }
 }
