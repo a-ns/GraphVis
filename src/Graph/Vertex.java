@@ -99,7 +99,7 @@ public class Vertex extends Circle {
     public String toString(){
         return "VERTEX ==>\n" + "{ value : " + this.value + ", ID: " + super.getId() + "," + '\n' +
                 "\t\t edges : {" + this.printEdges() +
-                "}";
+                "}\nxVal: " + this.getCenterX() + "\nyVal: " + this.getCenterY();
     }
     private String printEdges () {
         if (this.edges.isEmpty()) {
