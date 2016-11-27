@@ -93,22 +93,26 @@ public class Graph_Canvas_Controller {
         this.bRunAlg.setOnMouseClicked(e-> {
             //run the currentAlgorithm
             if(currentAlgorithm.equals("dfs")){
+                this.messageBox.setText("Running Depth First Search!");
                 //run dfs
                 //ASK TO SPECIFY START NODE, then pass in that vertex to DFS
-                Vertex start =
-                DepthFirstSearch dfs = new DepthFirstSearch(this.graph, start);
+                //Vertex start =
+                //DepthFirstSearch dfs = new DepthFirstSearch(this.graph, start);
                 //for loop for showing the states stored in dfs as a list of graphs.
                 //draw graph in the for loop for the length of the list
                 //if they want to step, just wait for next mouse click on next arrow to show the step. do it in a while loop.
                 //while not reached final step, show current graph and wait for a mouseclick on either "next" or "play to end" or something
             }
             else if(currentAlgorithm.equals("bfs")){
+                this.messageBox.setText("Running Breadth First Search!");
                 //run bfs
             }
             else if(currentAlgorithm.equals("kruskals")){
+                this.messageBox.setText("Running Kruskal's Minimal Spanning Tree!");
                 //run kruskals
             }
             else if(currentAlgorithm.equals("dijkstras")){
+                this.messageBox.setText("Running Dijkstra's!");
                 //run dijkstras
             }
         });
