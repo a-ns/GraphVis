@@ -360,8 +360,9 @@ public class Graph_Canvas_Controller {
                                             this.getGraph().getVertex(this.selectedNodeID2));
                             //show visualization from arraylist returned
                             ArrayList<ColorMatrix> states = dfs.getStates();
+                            System.out.println(dfs.getVisited());
                             for(int i = 0; i < states.size(); i++){
-                                
+
                             }
                         }
                     }

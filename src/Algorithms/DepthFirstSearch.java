@@ -17,6 +17,7 @@ public class DepthFirstSearch{
 	private  boolean found = false;
 	
 	public DepthFirstSearch(Graph g, Vertex startNode, Vertex targetNode){
+		states = new ArrayList<ColorMatrix>();
 		visitedNodes = "";
 		currentState = g;
 		this.adjMatrix = g.toAdjacencyMatrix();
@@ -29,6 +30,9 @@ public class DepthFirstSearch{
 		states.add(cm);
 		depthFirstSearch(adjMatrix, startNode, targetNode, cm);
 		
+	}
+	public String getVisited(){
+		return this.visitedNodes;
 	}
 	public ArrayList<ColorMatrix> getStates(){
 		return this.states;
