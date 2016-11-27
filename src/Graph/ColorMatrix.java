@@ -17,9 +17,11 @@ public class ColorMatrix {
     Will have a separate colormatrix for each step in an algorithm for visualization purposes.
      */
     private int[][] colorMatrix;
+    private int numVerts;
 
     public ColorMatrix(int numVertices){
         colorMatrix = new int[numVertices][numVertices];
+        numVerts = numVertices;
     }
     /*
     Get the integer matrix holding the values of colormatrix.
@@ -33,6 +35,10 @@ public class ColorMatrix {
      */
     public void setColorMatrixAt(int i, int j, int value){
         this.colorMatrix[i][j] = value;
+    }
+
+    public int getNumVertices(){
+        return this.numVerts;
     }
 
 }

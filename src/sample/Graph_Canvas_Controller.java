@@ -21,6 +21,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class Graph_Canvas_Controller {
@@ -358,7 +359,10 @@ public class Graph_Canvas_Controller {
                                     (this.getGraph(), this.getGraph().getVertex(this.selectedNodeID1),
                                             this.getGraph().getVertex(this.selectedNodeID2));
                             //show visualization from arraylist returned
-
+                            ArrayList<ColorMatrix> states = dfs.getStates();
+                            for(int i = 0; i < states.size(); i++){
+                                
+                            }
                         }
                     }
                 }
