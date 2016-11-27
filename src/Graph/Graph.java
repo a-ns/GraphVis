@@ -67,14 +67,14 @@ public class Graph {
      * @param bidirectional the bidirectional
      * @return the boolean
      */
-    public Edge addEdge(String from, String to, boolean... bidirectional) {
+    public Edge addEdge(String from, String to, int weight, boolean... bidirectional) {
         try {
             if (this.hasVertex(from) && this.hasVertex(to)) {
-                Edge newEdge = new Edge (getVertex(from), getVertex(to));
+                Edge newEdge = new Edge (weight, getVertex(from), getVertex(to));
                 getVertex(from).put(newEdge);
                 if (bidirectional.length > 0) {
                     if (bidirectional[0]) {
-                        this.addEdge(to , from);
+                        this.addEdge(to , from, weight);
                     }
 
                 }

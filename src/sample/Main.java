@@ -21,6 +21,7 @@ public class Main extends Application {
         this.gcc = graph_canvas_loader.getController();
         this.gcc.setParent(root);
         this.gcc.setHandlers();
+        this.gcc.setupChoice();
         primaryStage.setTitle("Fancy Graph Program");
         primaryStage.setScene(new Scene(root, 600, 325));
 
