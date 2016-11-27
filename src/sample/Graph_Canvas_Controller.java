@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -66,6 +67,14 @@ public class Graph_Canvas_Controller {
 
 
     public void setHandlers () {
+        this.root.setOnKeyPressed(e->{
+            if (e.getCode() == KeyCode.ESCAPE) {
+                addVertMode = false;
+                addEdgeMode = false;
+                firstNodeSelected = false;
+                this.messageBox.setText("No Mode Selected");
+            }
+        });
         this.bAddOne.setOnMouseClicked( e -> {
             //this.bAddOne.setText("Add Nodes");
             this.messageBox.setText("Add nodes by selecting a location on the graph and entering in a value.");
@@ -151,12 +160,22 @@ public class Graph_Canvas_Controller {
 
                     // Traditional way to get the response value.
                     String result = dialog.showAndWait().orElse("n/a");
-                    if (result.matches("^[a-zA-Z0-9]*$") && this.graph.getVertex(result) == null) {
+                    if (result.matches("^[a-zA-Z0-9]*$") && this.graph.getVertex(result) == null && result.length() > 0) {
                         Vertex circ = this.graph.addVertex(xVal, yVal, 10);
                         circ.setValue(result);
                         circ.setOnMouseDragged(e -> {
                             circ.setCenterX(e.getSceneX());
                             circ.setCenterY(e.getSceneY());
+                            for(Edge edge: graph.getEdges()){
+                                if (edge.getFrom() == circ ) {
+                                    edge.setStartX(circ.getCenterX());
+                                    edge.setStartY(circ.getCenterY());
+                                }
+                                else if(edge.getTo() == circ) {
+                                    edge.setEndX(circ.getCenterX());
+                                    edge.setEndY(circ.getCenterY());
+                                }
+                            }
                         });
                         this.root.getChildren().add(circ);
                         nodeNum++;
