@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -66,6 +67,14 @@ public class Graph_Canvas_Controller {
 
 
     public void setHandlers () {
+        this.root.setOnKeyPressed(e->{
+            if (e.getCode() == KeyCode.ESCAPE) {
+                addVertMode = false;
+                addEdgeMode = false;
+                firstNodeSelected = false;
+                this.messageBox.setText("No Mode Selected");
+            }
+        });
         this.bAddOne.setOnMouseClicked( e -> {
             //this.bAddOne.setText("Add Nodes");
             this.messageBox.setText("Add nodes by selecting a location on the graph and entering in a value.");
