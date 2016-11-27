@@ -1,9 +1,11 @@
 package sample;
 
-import Graph.Graph;
+import Graph.*;
+import Graph.Vertex;
 import com.jfoenix.controls.JFXButton;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.geometry.Point2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
@@ -33,6 +35,11 @@ public class Graph_Canvas_Controller {
 
     private boolean addVertMode = false;
     private boolean addEdgeMode = false;
+
+    private int nodeNum = 1;
+
+    private boolean firstNodeSelected = false;
+    private int firstNode = -1;
 
     @FXML
     public void initialize () {
@@ -71,7 +78,8 @@ public class Graph_Canvas_Controller {
             if(addVertMode) {
                 double xVal = event.getSceneX();
                 double yVal = event.getSceneY();
-                Circle circ = this.graph.addVertex(xVal, yVal, 10);
+                Vertex circ = this.graph.addVertex(xVal, yVal, 10);
+                circ.setValue("" + nodeNum++);
                 circ.setOnMouseDragged(e -> {
                     circ.setCenterX(e.getSceneX());
                     circ.setCenterY(e.getSceneY());
@@ -79,11 +87,47 @@ public class Graph_Canvas_Controller {
                 this.root.getChildren().add(circ);
                 System.out.println(this.graph);
             }
+            else if(addEdgeMode) {
+                double xVal = event.getSceneX();
+                double yVal = event.getSceneY();
+
+                Point2D clickPoint = new Point2D(xVal, yVal);
+
+                int closestCircle = -1;
+                double closestDistance = -1;
+
+                for(int i = 0; i < nodeNum; i++){
+                    Vertex v = this.graph.getVertex(i+1);
+
+                    if(v != null){
+                        Point2D circlePoint = new Point2D(v.getCenterX(), v.getCenterY());
+
+                        double distance = clickPoint.distance(circlePoint);
+                        if(distance < 17.0 && (distance < closestDistance || closestDistance == -1)){
+                            closestCircle = i+1;
+                            closestDistance = distance;
+                        }
+                    }
+
+                }
+
+                if(closestCircle != -1 && !firstNodeSelected){
+                    firstNode = closestCircle;
+                    firstNodeSelected = true;
+                }
+                else if(closestCircle != -1){
+                    Edge edge = this.graph.addEdge(firstNode + "", closestCircle + "", true);
+                    this.root.getChildren().add(edge);
+                }
+                System.out.println(this.graph);
+            }
         });
         this.bAddEdges.setOnMouseClicked( (MouseEvent event) -> {
             addEdgeMode = true;
             addVertMode = false;
-            addEdge();
+            firstNodeSelected = false;
+            firstNode = -1;
+            //addEdge();
         });
     }
 

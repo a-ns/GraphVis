@@ -25,6 +25,12 @@ public class Edge extends Line {
         this.weight = weight;
         this.from = from;
         this.to = to;
+
+        this.setStartX(this.from.getCenterX());
+        this.setStartY(this.from.getCenterY());
+        this.setEndX(this.to.getCenterX());
+        this.setEndY(this.to.getCenterY());
+
         super.setId(String.valueOf(Graph.edgeID+=1));
     }
 
@@ -38,6 +44,12 @@ public class Edge extends Line {
         this.weight = 0;
         this.from = from;
         this.to = to;
+
+        this.setStartX(this.from.getCenterX());
+        this.setStartY(this.from.getCenterY());
+        this.setEndX(this.to.getCenterX());
+        this.setEndY(this.to.getCenterY());
+
         super.setId(String.valueOf(Graph.edgeID+=1));
     }
 

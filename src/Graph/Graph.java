@@ -67,7 +67,7 @@ public class Graph {
      * @param bidirectional the bidirectional
      * @return the boolean
      */
-    public boolean addEdge(String from, String to, boolean... bidirectional) {
+    public Edge addEdge(String from, String to, boolean... bidirectional) {
         try {
             if (this.hasVertex(from) && this.hasVertex(to)) {
                 Edge newEdge = new Edge (getVertex(from), getVertex(to));
@@ -79,12 +79,12 @@ public class Graph {
 
                 }
                 this.edges.add(newEdge);
-                return true;
+                return newEdge;
             }
-            return false;
+            return null;
         }
         catch (Exception e) {
-            return false;
+            return null;
         }
     }
 
