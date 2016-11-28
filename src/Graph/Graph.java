@@ -2,6 +2,7 @@ package Graph;
 
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Text;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -16,7 +17,9 @@ public class Graph {
     protected static int vertexID = 0;
 
     private List<Edge> edges;
+    private List<Text> edgeLabels;
     private List<Vertex> nodes;
+    private List<Text> nodeLabels;
 
     /**
      * Instantiates a new Graph.
@@ -24,14 +27,24 @@ public class Graph {
     public Graph () {
         this.edges = new LinkedList<>();
         this.nodes = new LinkedList<>();
+        this.edgeLabels = new LinkedList<>();
+        this.nodeLabels = new LinkedList<>();
     }
 
     public List<Edge> getEdges () {
         return this.edges;
     }
 
+    public List<Text> getEdgeLabels () {
+        return this.edgeLabels;
+    }
+
     public List<Vertex> getVertices () {
         return this.nodes;
+    }
+
+    public List<Text> getVertexLabels () {
+        return this.nodeLabels;
     }
     /**
      * Add vertex boolean.
@@ -86,6 +99,44 @@ public class Graph {
         catch (Exception e) {
             return null;
         }
+    }
+
+
+    /**
+     * Add edge text.
+     *
+     * @param edge          edge to be labeled
+     * @param label         label for the edge
+     * @return the Text object
+     */
+    public Text addEdgeText(Edge edge, String label) {
+        Text text = new Text();
+        text.setX((edge.getEndX() + edge.getStartX())/2 - (label.length()*3));
+        text.setY((edge.getEndY() + edge.getStartY())/2 - 15);
+        text.setText(label);
+        this.edgeLabels.add(text);
+
+        return text;
+    }
+
+    /**
+     * Add edge text.
+     *
+     * @param circ           to
+     * @return the boolean
+     */
+    public Text addVertexText(Vertex circ, String label) {
+        Text text = new Text();
+        if(circ != null) {
+            double xVal = circ.getCenterX();
+            double yVal = circ.getCenterY();
+
+            text.setX(xVal - (label.length() * 3));
+            text.setY(yVal - 15);
+            text.setText(label);
+            this.edgeLabels.add(text);
+        }
+        return text;
     }
 
     /**
