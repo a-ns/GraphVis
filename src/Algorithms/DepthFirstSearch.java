@@ -112,14 +112,6 @@ public class DepthFirstSearch{
 		}
 		return newCM;
 	}
-	private void addState(Vertex currentNode){
-		//Graph newG = currentState.clone();
-		int indexOfCurr = currentState.getVertices().indexOf(currentNode);
-
-	}
-	private void addState(Vertex currentNode, Edge currentEdge){
-
-	}
 	
 }
 

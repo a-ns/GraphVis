@@ -8,7 +8,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
  */
 public class Graph {
     private final static Logger LOGGER = Logger.getLogger(Graph.class.getName());
