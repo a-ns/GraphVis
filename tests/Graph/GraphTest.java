@@ -34,7 +34,7 @@ public class GraphTest {
         Graph graph = new Graph();
         graph.addVertex("5");
         graph.addVertex("10");
-        graph.addEdge("5", "10");
+        //graph.addEdge("5", "10");
         graph.removeVertex("5");
         assertEquals(null, graph.getVertex("5"));
 
@@ -45,7 +45,7 @@ public class GraphTest {
         Graph graph = new Graph();
         graph.addVertex("5");
         graph.addVertex("6");
-        graph.addEdge("5", "6");
+        //graph.addEdge("5", "6");
         assertNotEquals(null, graph.getEdge(graph.getVertex("5"), graph.getVertex("6")));
     }
 

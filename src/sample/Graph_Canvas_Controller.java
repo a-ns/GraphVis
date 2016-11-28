@@ -21,6 +21,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class Graph_Canvas_Controller {
@@ -40,7 +41,7 @@ public class Graph_Canvas_Controller {
     @FXML
     private ChoiceBox algSelect;
     private Graph graph;
-    final String[] algorithms = new String[]{"dfs", "bfs", "kruskals"};
+    final String[] algorithms = new String[]{"dfs", "bfs", "kruskals", "dijkstras"};
     private String currentAlgorithm;
     private Stage stage;
     private Pane root;
@@ -64,7 +65,7 @@ public class Graph_Canvas_Controller {
         this.graph = new Graph();
         currentAlgorithm = "";
         algSelect = new ChoiceBox(FXCollections.observableArrayList(
-                "Depth First Search", "Breadth First Search", "Kruskal's MST")
+                "Depth First Search", "Breadth First Search", "Kruskal's MST", "Dijkstra's SP")
         );
     }
 
@@ -353,6 +354,17 @@ public class Graph_Canvas_Controller {
                         this.selectNode2 = false;
 
                         //start the algorithm by passing both nodesIDs to the algorithm.
+                        if(currentAlgorithm.equals("dfs")){
+                            DepthFirstSearch dfs = new DepthFirstSearch
+                                    (this.getGraph(), this.getGraph().getVertex(this.selectedNodeID1),
+                                            this.getGraph().getVertex(this.selectedNodeID2));
+                            //show visualization from arraylist returned
+                            ArrayList<ColorMatrix> states = dfs.getStates();
+                            System.out.println(dfs.getVisited());
+                            for(int i = 0; i < states.size(); i++){
+
+                            }
+                        }
                     }
                 }
             }
