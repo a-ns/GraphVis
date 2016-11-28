@@ -2,6 +2,7 @@ package sample;
 
 import Algorithms.BreadthFirstSearch;
 import Algorithms.DepthFirstSearch;
+import Algorithms.DijkstraSP;
 import Graph.*;
 import Graph.Vertex;
 import javafx.animation.Animation;
@@ -352,12 +353,12 @@ public class Graph_Canvas_Controller {
                 if(nodeVal != null && nodeVal.length() > 0){
                     this.selectedNodeID1 = Integer.valueOf(this.graph.getVertex(nodeVal).getId());
 
-                    if(currentAlgorithm.equals("dfs") || currentAlgorithm.equals("bfs")){
+                    if(currentAlgorithm.equals("dfs") || currentAlgorithm.equals("bfs") || currentAlgorithm.equals("dijkstras")){
                         this.selectNode1 = false;
                         this.selectNode2 = true;
                         this.messageBox.setText("Select the node you want to find.");
                     }
-                    else if(currentAlgorithm.equals("kruskals") || currentAlgorithm.equals("dijkstras")){
+                    else if(currentAlgorithm.equals("kruskals")){
                         //start the algorithm by passing selectedNodeID1 to the algorithm
                         this.selectNode1 = false;
                     }
@@ -410,6 +411,32 @@ public class Graph_Canvas_Controller {
                             states = bfs.getStates();
                             System.out.println(bfs.getVisitedNodes());
                             this.messageBox.setText("Running Breadth First Search!");
+                            statesSize = states.size();
+                            currentState = 0;
+
+                            //timeline.play();
+                            processState();
+
+                            //System.out.println(bfs.getVisited());
+
+                            /*this.root.getChildren().removeAll(this.graph.getEdges());
+                            this.root.getChildren().removeAll(this.graph.getVertices());
+
+                            for(int j = 0; j < states.get(0).getNumVertices(); j++){
+                                for(int k = 0; k < states.get(0).getNumVertices(); k++){
+                                    this.root.getChildren().removeAll(this.graph.getEdges());
+                                    this.root.getChildren().removeAll(this.graph.getVertices());
+                                }
+                            }*/
+                        }
+                        else if(currentAlgorithm.equals("dijkstras")){
+                            DijkstraSP dsp = new DijkstraSP
+                                    (this.getGraph(), this.getGraph().getVertex(this.selectedNodeID1),
+                                            this.getGraph().getVertex(this.selectedNodeID2));
+                            //show visualization from arraylist returned
+                            states = dsp.getStates();
+                            System.out.println(dsp.getVisited());
+                            this.messageBox.setText("Running Dijkstra's Shortest Path Search!");
                             statesSize = states.size();
                             currentState = 0;
 
