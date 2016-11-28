@@ -1,5 +1,6 @@
 package sample;
 
+import Algorithms.BreadthFirstSearch;
 import Algorithms.DepthFirstSearch;
 import Graph.*;
 import Graph.Vertex;
@@ -390,6 +391,31 @@ public class Graph_Canvas_Controller {
                             processState();
 
                             System.out.println(dfs.getVisited());
+
+                            /*this.root.getChildren().removeAll(this.graph.getEdges());
+                            this.root.getChildren().removeAll(this.graph.getVertices());
+
+                            for(int j = 0; j < states.get(0).getNumVertices(); j++){
+                                for(int k = 0; k < states.get(0).getNumVertices(); k++){
+                                    this.root.getChildren().removeAll(this.graph.getEdges());
+                                    this.root.getChildren().removeAll(this.graph.getVertices());
+                                }
+                            }*/
+                        }
+                        else if(currentAlgorithm.equals("bfs")){
+                            BreadthFirstSearch bfs = new BreadthFirstSearch
+                                    (this.getGraph(), this.getGraph().getVertex(this.selectedNodeID1),
+                                            this.getGraph().getVertex(this.selectedNodeID2));
+                            //show visualization from arraylist returned
+                            states = bfs.getStates();
+                            this.messageBox.setText("Running Bredth First Search!");
+                            statesSize = states.size();
+                            currentState = 0;
+
+                            //timeline.play();
+                            processState();
+
+                            //System.out.println(bfs.getVisited());
 
                             /*this.root.getChildren().removeAll(this.graph.getEdges());
                             this.root.getChildren().removeAll(this.graph.getVertices());
