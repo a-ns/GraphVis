@@ -12,7 +12,7 @@ public class DepthFirstSearch{
 	private boolean[] visited;
 	private Graph currentState;
 	private Edge[][] adjMatrix;
-	private Edge[][] newMatrix;
+	private ColorMatrix currentCM;
 	private ArrayList<ColorMatrix> states;
 	private  boolean found = false;
 	
@@ -28,16 +28,19 @@ public class DepthFirstSearch{
 		int index = g.getVertices().indexOf(startNode);
 		cm.setColorMatrixAt(index, index, 2);
 		states.add(cm);
-		depthFirstSearch(adjMatrix, startNode, targetNode, cm);
-		
+		currentCM = cm;
+		depthFirstSearch(adjMatrix, startNode, targetNode);
+		states.add(backToBlack());
 	}
 	public String getVisited(){
 		return this.visitedNodes;
 	}
+
 	public ArrayList<ColorMatrix> getStates(){
 		return this.states;
 	}
-	private void depthFirstSearch(Edge[][] adjMatrix, Vertex startNode, Vertex targetNode, ColorMatrix cm){
+
+	private void depthFirstSearch(Edge[][] adjMatrix, Vertex startNode, Vertex targetNode){
 		int currentNodeIndex = currentState.getVertices().indexOf(startNode);
 		visitedNodes = visitedNodes + " " + startNode.getValue();
 		visited[currentNodeIndex] = true;
@@ -55,9 +58,10 @@ public class DepthFirstSearch{
 				//do dfs from that node to the rest of the nodes it's attached to
 				//visualize this by adding new colormatrix to the states list
 				//color the the edge between currentNodeIndex and i, and node i
-				ColorMatrix newCM = updateCM(cm, currentNodeIndex, i);
+				ColorMatrix newCM = updateCM(this.currentCM, currentNodeIndex, i);
 				states.add(newCM);
-				depthFirstSearch(adjMatrix, currentState.getVertices().get(i), targetNode, cm);
+				this.currentCM = newCM;
+				depthFirstSearch(adjMatrix, currentState.getVertices().get(i), targetNode);
 			}
 		}
 	}
@@ -74,17 +78,40 @@ public class DepthFirstSearch{
 		 */
 		for(int j = 0; j < cm.getNumVertices(); j++){
 			for(int k = 0; k < cm.getNumVertices(); k++){
-				newCM.setColorMatrixAt(j, k, oldMatrix[j][k]);
+				if(oldMatrix[j][k] == 2){
+					newCM.setColorMatrixAt(j, k, 1);
+				}
+				else newCM.setColorMatrixAt(j, k, oldMatrix[j][k]);
 			}
 		}
 		/*
 		update with newly colored edge and node
 		 */
-		newCM.setColorMatrixAt(currentNodeIndex, i, 3); //set edge to highlighted
-		newCM.setColorMatrixAt(i, i, 3); //set node to highlighted
+		newCM.setColorMatrixAt(currentNodeIndex, i, 2); //set edge to highlighted
+		if(!this.currentState.isDirected()){
+			//not directed so update edge from i to currentNodeIndex also
+			newCM.setColorMatrixAt(i, currentNodeIndex, 2); //set edge to highlighted
+		}
+		newCM.setColorMatrixAt(i, i, 2); //set node to highlighted
 		return newCM;
 	}
 
+	private ColorMatrix backToBlack(){
+		ColorMatrix newCM = new ColorMatrix(this.currentCM.getNumVertices());
+		int[][] oldMatrix = this.currentCM.getColorMatrix();
+		/*
+		make the last edge and node highlighted go to black for the ending. #badcodingpractices
+		 */
+		for(int j = 0; j < this.currentCM.getNumVertices(); j++){
+			for(int k = 0; k < this.currentCM.getNumVertices(); k++){
+				if(oldMatrix[j][k] == 2){
+					newCM.setColorMatrixAt(j, k, 1);
+				}
+				else newCM.setColorMatrixAt(j, k, oldMatrix[j][k]);
+			}
+		}
+		return newCM;
+	}
 	private void addState(Vertex currentNode){
 		//Graph newG = currentState.clone();
 		int indexOfCurr = currentState.getVertices().indexOf(currentNode);

@@ -9,13 +9,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Created by Alex on 11/1/2016.
+ *
  */
 public class Graph {
     private final static Logger LOGGER = Logger.getLogger(Graph.class.getName());
     protected static int edgeID = 0;
     protected static int vertexID = 0;
-
+    private boolean isDirected = false;
+    private boolean isWeighted = false;
     private List<Edge> edges;
     private List<Text> edgeLabels;
     private List<Vertex> nodes;
@@ -282,4 +283,19 @@ public class Graph {
         return matrix;
     }
 
+    public boolean isDirected() {
+        return isDirected;
+    }
+
+    public void setDirected(boolean directed) {
+        isDirected = directed;
+    }
+
+    public boolean isWeighted() {
+        return isWeighted;
+    }
+
+    public void setWeighted(boolean weighted) {
+        isWeighted = weighted;
+    }
 }

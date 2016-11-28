@@ -3,7 +3,6 @@ package sample;
 import Algorithms.DepthFirstSearch;
 import Graph.*;
 import Graph.Vertex;
-import com.jfoenix.controls.JFXButton;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -12,10 +11,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -47,6 +43,23 @@ public class Graph_Canvas_Controller {
     private Label messageBox;
     @FXML
     private ChoiceBox algSelect;
+    @FXML
+    private Button deleteNode;
+    @FXML
+    private Button deleteEdge;
+    @FXML
+    private Button stepBack;
+    @FXML
+    private Button stepForward;
+    @FXML
+    private Button pause;
+    @FXML
+    private Button play;
+    @FXML
+    private CheckBox directed;
+    @FXML
+    private CheckBox weighted;
+
     private Graph graph;
     private Graph graph2;
     final String[] algorithms = new String[]{"dfs", "bfs", "kruskals", "dijkstras"};
@@ -97,6 +110,51 @@ public class Graph_Canvas_Controller {
 
 
     public void setHandlers () {
+        this.directed.setOnMouseClicked(e->{
+            //happens when directed box is clicked.
+            this.getGraph().setDirected(!this.getGraph().isDirected());
+
+        });
+        this.weighted.setOnMouseClicked(e->{
+            //happens when weighted box is clicked
+            this.getGraph().setWeighted(!this.getGraph().isWeighted());
+        });
+        this.deleteNode.setOnMouseClicked(e -> {
+            //delete node mode
+            this.messageBox.setText("Click on a node to delete it.");
+
+
+
+        });
+        this.deleteEdge.setOnMouseClicked( e -> {
+            //delete edge mode
+            this.messageBox.setText("Click on an edge to delete it.");
+
+
+
+        });
+        this.stepBack.setOnMouseClicked(e->{
+            //STEP BACK IN THE ANIMATION
+
+
+        });
+        this.stepForward.setOnMouseClicked((e->{
+            //STEP FORWARD IN THE ANIMATION
+
+
+        }));
+        this.pause.setOnMouseClicked(e->{
+            //PAUSE THE ANIMATION UNTIL PLAY IS HIT. Perhaps do have a "isPlayingNow" boolean that is
+            //set to false when pause is pressed and set to true when play is pressed. this
+            //could dictate when to keep playing the animation
+
+
+        });
+        this.play.setOnMouseClicked(e-> {
+            //PLAY THE ANIMATION - maybe set the boolean play variable to true here
+
+
+        });
         this.root.setOnKeyPressed(e->{
             if (e.getCode() == KeyCode.ESCAPE) {
                 addVertMode = false;
@@ -210,9 +268,9 @@ public class Graph_Canvas_Controller {
 
                 if(closestDistance == -1) {
                     TextInputDialog dialog = new TextInputDialog("");
-                    dialog.setTitle("Vertex Name");
+                    dialog.setTitle("Vertex Value");
                     //dialog.setHeaderText("Look, a Text Input Dialog");
-                    dialog.setContentText("Please enter the vertex name:");
+                    dialog.setContentText("Please enter the vertex value:");
 
                     // Traditional way to get the response value.
                     String result = dialog.showAndWait().orElse("n/a");
@@ -378,7 +436,7 @@ public class Graph_Canvas_Controller {
                                             this.getGraph().getVertex(this.selectedNodeID2));
                             //show visualization from arraylist returned
                             states = dfs.getStates();
-
+                            this.messageBox.setText("Running Depth First Search!");
                             statesSize = states.size();
                             currentState = 0;
 
@@ -415,9 +473,9 @@ public class Graph_Canvas_Controller {
 
 
 
-    public void setbAddOne(JFXButton bAddOne) {
+    /*public void setbAddOne(JFXButton bAddOne) {
         this.bAddOne = bAddOne;
-    }
+    }*/
     public void addEdge(){
         
         this.messageBox.setText("Select a starting node for the edge.");
@@ -442,7 +500,7 @@ public class Graph_Canvas_Controller {
 
     public void setupChoice() {
         algSelect.setLayoutX(14);
-        algSelect.setLayoutY(287);
+        algSelect.setLayoutY(406);
         algSelect.setMinWidth(108);
         algSelect.setPrefWidth(108);
         root.getChildren().add(algSelect);
