@@ -408,7 +408,8 @@ public class Graph_Canvas_Controller {
                                             this.getGraph().getVertex(this.selectedNodeID2));
                             //show visualization from arraylist returned
                             states = bfs.getStates();
-                            this.messageBox.setText("Running Bredth First Search!");
+                            System.out.println(bfs.getVisitedNodes());
+                            this.messageBox.setText("Running Breadth First Search!");
                             statesSize = states.size();
                             currentState = 0;
 

@@ -21,6 +21,7 @@ public class BreadthFirstSearch {
 
     public BreadthFirstSearch(Graph g, Vertex startNode, Vertex targetNode){
         queue = new LinkedList<Vertex>();
+        this.states = new ArrayList<ColorMatrix>();
         this.currentState = g;
         visited = new boolean[g.getVertices().size()];
         ColorMatrix cm = new ColorMatrix(g.getVertices().size());
