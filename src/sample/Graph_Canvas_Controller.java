@@ -3,7 +3,6 @@ package sample;
 import Algorithms.DepthFirstSearch;
 import Graph.*;
 import Graph.Vertex;
-import com.jfoenix.controls.JFXButton;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -419,9 +418,9 @@ public class Graph_Canvas_Controller {
 
 
 
-    public void setbAddOne(JFXButton bAddOne) {
+    /*public void setbAddOne(JFXButton bAddOne) {
         this.bAddOne = bAddOne;
-    }
+    }*/
     public void addEdge(){
         
         this.messageBox.setText("Select a starting node for the edge.");
