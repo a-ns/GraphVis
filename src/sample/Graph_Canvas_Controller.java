@@ -373,7 +373,7 @@ public class Graph_Canvas_Controller {
                 if(nodeVal != null && nodeVal.length() > 0){
                     this.selectedNodeID2 = Integer.valueOf(this.graph.getVertex(nodeVal).getId());
 
-                    if(currentAlgorithm.equals("dfs") || currentAlgorithm.equals("bfs")){
+                    if(currentAlgorithm.equals("dfs") || currentAlgorithm.equals("bfs") || currentAlgorithm.equals("dijkstras")){
                         this.selectNode1 = false;
                         this.selectNode2 = false;
 
@@ -435,7 +435,7 @@ public class Graph_Canvas_Controller {
                                             this.getGraph().getVertex(this.selectedNodeID2));
                             //show visualization from arraylist returned
                             states = dsp.getStates();
-                            System.out.println(dsp.getVisited());
+                            //System.out.println(dsp.getVisited());
                             this.messageBox.setText("Running Dijkstra's Shortest Path Search!");
                             statesSize = states.size();
                             currentState = 0;
