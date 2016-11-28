@@ -182,7 +182,9 @@ public class Graph_Canvas_Controller {
         });
         this.clear.setOnMouseClicked( e-> {
             this.root.getChildren().removeAll(this.graph.getEdges());
+            this.root.getChildren().removeAll(this.graph.getEdgeLabels());
             this.root.getChildren().removeAll(this.graph.getVertices());
+            this.root.getChildren().removeAll(this.graph.getVertexLabels());
             this.graph = new Graph();
             this.messageBox.setText("Graph cleared. Create a new graph by adding new nodes!");
         });
@@ -290,10 +292,7 @@ public class Graph_Canvas_Controller {
                             }
                         });*/
 
-                        Text text = new Text();
-                        text.setX(xVal - (result.length()*3));
-                        text.setY(yVal - 15);
-                        text.setText(result);
+                        Text text = this.graph.addVertexText(circ, result);
                         this.root.getChildren().add(text);
                         this.root.getChildren().add(circ);
                         nodeNum++;
@@ -344,10 +343,7 @@ public class Graph_Canvas_Controller {
 
                         if (edge != null) {
 
-                            Text text = new Text();
-                            text.setX((edge.getEndX() + edge.getStartX())/2 - (result.length()*3));
-                            text.setY((edge.getEndY() + edge.getStartY())/2 - 15);
-                            text.setText(result);
+                            Text text = this.graph.addEdgeText(edge, result);
                             this.root.getChildren().add(text);
                             this.root.getChildren().add(edge);
                         }
