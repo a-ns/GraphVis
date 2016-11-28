@@ -123,37 +123,41 @@ public class Graph_Canvas_Controller {
             //delete node mode
             this.messageBox.setText("Click on a node to delete it.");
 
-
-
         });
         this.deleteEdge.setOnMouseClicked( e -> {
             //delete edge mode
             this.messageBox.setText("Click on an edge to delete it.");
-
-
-
         });
         this.stepBack.setOnMouseClicked(e->{
             //STEP BACK IN THE ANIMATION
-
-
+            timeline.pause();
+            if(currentState == 1){
+                currentState--;
+                processState();
+            }
+            else if(currentState > 1){
+                currentState--;
+                currentState--;
+                processState();
+            }
         });
         this.stepForward.setOnMouseClicked((e->{
             //STEP FORWARD IN THE ANIMATION
 
+            timeline.pause();
+            processState();
 
         }));
         this.pause.setOnMouseClicked(e->{
             //PAUSE THE ANIMATION UNTIL PLAY IS HIT. Perhaps do have a "isPlayingNow" boolean that is
             //set to false when pause is pressed and set to true when play is pressed. this
             //could dictate when to keep playing the animation
-
-
+            timeline.pause();
         });
         this.play.setOnMouseClicked(e-> {
             //PLAY THE ANIMATION - maybe set the boolean play variable to true here
 
-
+            timeline.play();
         });
         this.root.setOnKeyPressed(e->{
             if (e.getCode() == KeyCode.ESCAPE) {
@@ -244,29 +248,9 @@ public class Graph_Canvas_Controller {
                 double xVal = event.getSceneX();
                 double yVal = event.getSceneY();
 
-                Point2D clickPoint = new Point2D(xVal, yVal);
+                String nodeVal = getClosestNode(xVal,yVal);
 
-                String closestCircle = "";
-                double closestDistance = -1;
-
-                for(int i = 0; i < nodeNum; i++){
-                    Vertex v = this.graph.getVertex(i+1);
-
-                    if(v != null){
-                        Point2D circlePoint = new Point2D(v.getCenterX(), v.getCenterY());
-
-                        double distance = clickPoint.distance(circlePoint);
-                        if(distance < 12.0 && (distance < closestDistance || closestDistance == -1)){
-                            closestCircle = v.getValue();
-                            closestDistance = distance;
-                        }
-                    }
-
-                }
-
-                System.out.println(closestDistance + "");
-
-                if(closestDistance == -1) {
+                if(nodeVal == null) {
                     TextInputDialog dialog = new TextInputDialog("");
                     dialog.setTitle("Vertex Value");
                     //dialog.setHeaderText("Look, a Text Input Dialog");
@@ -305,32 +289,14 @@ public class Graph_Canvas_Controller {
                 double xVal = event.getSceneX();
                 double yVal = event.getSceneY();
 
-                Point2D clickPoint = new Point2D(xVal, yVal);
+                String nodeVal = getClosestNode(xVal,yVal);
 
-                String closestCircle = "";
-                double closestDistance = -1;
-
-                for(int i = 0; i < nodeNum; i++){
-                    Vertex v = this.graph.getVertex(i+1);
-
-                    if(v != null){
-                        Point2D circlePoint = new Point2D(v.getCenterX(), v.getCenterY());
-
-                        double distance = clickPoint.distance(circlePoint);
-                        if(distance < 17.0 && (distance < closestDistance || closestDistance == -1)){
-                            closestCircle = v.getValue();
-                            closestDistance = distance;
-                        }
-                    }
-
-                }
-
-                if(closestCircle.length() > 0 && !firstNodeSelected){
-                    firstNode = closestCircle;
+                if(nodeVal != null && nodeVal.length() > 0 && !firstNodeSelected){
+                    firstNode = nodeVal;
                     firstNodeSelected = true;
                     this.messageBox.setText("Select an ending node for the edge.");
                 }
-                else if(closestCircle.length() > 0){
+                else if(nodeVal != null && nodeVal.length() > 0 && this.getGraph().isWeighted()){
                     TextInputDialog dialog = new TextInputDialog("1");
                     dialog.setTitle("Edge Weight");
                     //dialog.setHeaderText("Look, a Text Input Dialog");
@@ -339,7 +305,7 @@ public class Graph_Canvas_Controller {
                     // Traditional way to get the response value.
                     String result = dialog.showAndWait().orElse("n/a");
                     if (result.matches("^[1-9]\\d*$") && result.length() > 0){
-                        Edge edge = this.graph.addEdge(firstNode, closestCircle, Integer.parseInt(result), true);
+                        Edge edge = this.graph.addEdge(firstNode, nodeVal, Integer.parseInt(result), this.getGraph().isDirected() ? false : true);
 
                         if (edge != null) {
 
@@ -359,34 +325,31 @@ public class Graph_Canvas_Controller {
                         this.messageBox.setText("That edge was not created, select another starting node.");
                     }
                 }
+                else if(nodeVal != null && nodeVal.length() > 0 ){
+                    Edge edge = this.graph.addEdge(firstNode, nodeVal, 1, this.getGraph().isDirected() ? false : true);
+
+                    if (edge != null) {
+                        Text text = this.graph.addEdgeText(edge, "");
+                        this.root.getChildren().add(text);
+                        this.root.getChildren().add(edge);
+                    }
+                    firstNodeSelected = false;
+                    firstNode = "";
+                    this.messageBox.setText("Edge created! To add more edges, select another starting node.");
+                    if (edge == null)
+                        this.messageBox.setText("That edge already exists, select another starting node.");
+
+                }
                 System.out.println(this.graph);
             }
             else if(selectNode1) {
                 double xVal = event.getSceneX();
                 double yVal = event.getSceneY();
 
-                Point2D clickPoint = new Point2D(xVal, yVal);
+                String nodeVal = getClosestNode(xVal,yVal);
 
-                String closestCircle = "";
-                double closestDistance = -1;
-
-                for(int i = 0; i < nodeNum; i++){
-                    Vertex v = this.graph.getVertex(i+1);
-
-                    if(v != null){
-                        Point2D circlePoint = new Point2D(v.getCenterX(), v.getCenterY());
-
-                        double distance = clickPoint.distance(circlePoint);
-                        if(distance < 17.0 && (distance < closestDistance || closestDistance == -1)){
-                            closestCircle = v.getValue();
-                            closestDistance = distance;
-                        }
-                    }
-
-                }
-
-                if(closestDistance > 0){
-                    this.selectedNodeID1 = Integer.valueOf(this.graph.getVertex(closestCircle).getId());
+                if(nodeVal != null && nodeVal.length() > 0){
+                    this.selectedNodeID1 = Integer.valueOf(this.graph.getVertex(nodeVal).getId());
 
                     if(currentAlgorithm.equals("dfs") || currentAlgorithm.equals("bfs")){
                         this.selectNode1 = false;
@@ -403,27 +366,10 @@ public class Graph_Canvas_Controller {
                 double xVal = event.getSceneX();
                 double yVal = event.getSceneY();
 
-                Point2D clickPoint = new Point2D(xVal, yVal);
+                String nodeVal = getClosestNode(xVal,yVal);
 
-                String closestCircle = "";
-                double closestDistance = -1;
-
-                for(int i = 0; i < nodeNum; i++){
-                    Vertex v = this.graph.getVertex(i+1);
-
-                    if(v != null){
-                        Point2D circlePoint = new Point2D(v.getCenterX(), v.getCenterY());
-
-                        double distance = clickPoint.distance(circlePoint);
-                        if(distance < 17.0 && (distance < closestDistance || closestDistance == -1)){
-                            closestCircle = v.getValue();
-                            closestDistance = distance;
-                        }
-                    }
-
-                }
-                if(closestDistance > 0){
-                    this.selectedNodeID2 = Integer.valueOf(this.graph.getVertex(closestCircle).getId());
+                if(nodeVal != null && nodeVal.length() > 0){
+                    this.selectedNodeID2 = Integer.valueOf(this.graph.getVertex(nodeVal).getId());
 
                     if(currentAlgorithm.equals("dfs") || currentAlgorithm.equals("bfs")){
                         this.selectNode1 = false;
@@ -440,7 +386,8 @@ public class Graph_Canvas_Controller {
                             statesSize = states.size();
                             currentState = 0;
 
-                            timeline.play();
+                            //timeline.play();
+                            processState();
 
                             System.out.println(dfs.getVisited());
 
@@ -509,7 +456,7 @@ public class Graph_Canvas_Controller {
     private void processState(){
 
         if(currentState >= statesSize){
-            timeline.stop();
+            timeline.pause();
             return;
         }
 
@@ -558,5 +505,30 @@ public class Graph_Canvas_Controller {
             System.out.println(states.size());
         }
         currentState++;
+    }
+
+    private String getClosestNode(double xVal, double yVal){
+        Point2D clickPoint = new Point2D(xVal, yVal);
+
+        String closestCircle = "";
+        double closestDistance = -1;
+
+        for(int i = 0; i < nodeNum; i++){
+            Vertex v = this.graph.getVertex(i+1);
+
+            if(v != null){
+                Point2D circlePoint = new Point2D(v.getCenterX(), v.getCenterY());
+
+                double distance = clickPoint.distance(circlePoint);
+                if(distance < 17.0 && (distance < closestDistance || closestDistance == -1)){
+                    closestCircle = v.getValue();
+                    closestDistance = distance;
+                }
+            }
+
+        }
+
+        if(closestDistance > -1) return closestCircle;
+        return null;
     }
 }
