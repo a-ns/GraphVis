@@ -4,6 +4,9 @@ import Algorithms.DepthFirstSearch;
 import Graph.*;
 import Graph.Vertex;
 import com.jfoenix.controls.JFXButton;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -17,9 +20,13 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+
+import java.util.concurrent.TimeUnit;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -41,6 +48,7 @@ public class Graph_Canvas_Controller {
     @FXML
     private ChoiceBox algSelect;
     private Graph graph;
+    private Graph graph2;
     final String[] algorithms = new String[]{"dfs", "bfs", "kruskals", "dijkstras"};
     private String currentAlgorithm;
     private Stage stage;
@@ -60,10 +68,24 @@ public class Graph_Canvas_Controller {
     private boolean firstNodeSelected = false;
     private String firstNode = "";
 
+    private ArrayList<ColorMatrix> states;
+    private int statesSize;
+    private int currentState;
+
+    private Timeline timeline;
+
     @FXML
     public void initialize () {
         this.graph = new Graph();
+        this.graph2 = new Graph();
         currentAlgorithm = "";
+
+        timeline = new Timeline(new KeyFrame(
+                Duration.millis(1000),
+                ae -> processState()));
+        timeline.setCycleCount(Animation.INDEFINITE);
+        //timeline.play();
+
         algSelect = new ChoiceBox(FXCollections.observableArrayList(
                 "Depth First Search", "Breadth First Search", "Kruskal's MST", "Dijkstra's SP")
         );
@@ -217,8 +239,8 @@ public class Graph_Canvas_Controller {
                         this.root.getChildren().add(text);
                         this.root.getChildren().add(circ);
                         nodeNum++;
-                        System.out.println(this.graph);
 
+                        System.out.println(this.graph);
                     }
                 }
             }
@@ -359,11 +381,24 @@ public class Graph_Canvas_Controller {
                                     (this.getGraph(), this.getGraph().getVertex(this.selectedNodeID1),
                                             this.getGraph().getVertex(this.selectedNodeID2));
                             //show visualization from arraylist returned
-                            ArrayList<ColorMatrix> states = dfs.getStates();
-                            System.out.println(dfs.getVisited());
-                            for(int i = 0; i < states.size(); i++){
+                            states = dfs.getStates();
 
-                            }
+                            statesSize = states.size();
+                            currentState = 0;
+
+                            timeline.play();
+
+                            System.out.println(dfs.getVisited());
+
+                            /*this.root.getChildren().removeAll(this.graph.getEdges());
+                            this.root.getChildren().removeAll(this.graph.getVertices());
+
+                            for(int j = 0; j < states.get(0).getNumVertices(); j++){
+                                for(int k = 0; k < states.get(0).getNumVertices(); k++){
+                                    this.root.getChildren().removeAll(this.graph.getEdges());
+                                    this.root.getChildren().removeAll(this.graph.getVertices());
+                                }
+                            }*/
                         }
                     }
                 }
@@ -415,5 +450,59 @@ public class Graph_Canvas_Controller {
         algSelect.setMinWidth(108);
         algSelect.setPrefWidth(108);
         root.getChildren().add(algSelect);
+    }
+
+    private void processState(){
+
+        if(currentState >= statesSize){
+            timeline.stop();
+            return;
+        }
+
+        this.root.getChildren().removeAll(this.graph.getEdges());
+        this.root.getChildren().removeAll(this.graph.getVertices());
+
+        for(int j = 0; j < states.get(currentState).getNumVertices(); j++){
+            for(int k = 0; k < states.get(currentState).getNumVertices(); k++){
+                System.out.print(states.get(currentState).getColorMatrix()[j][k] + "\t");
+
+                if(j == k){
+                    Vertex v = this.graph.getVertices().get(j);
+
+                    if(v != null) {
+                        if (states.get(currentState).getColorMatrix()[j][k] == 0)
+                            v.setFill(Color.GRAY);
+                        if (states.get(currentState).getColorMatrix()[j][k] == 1)
+                            v.setFill(Color.BLACK);
+                        if (states.get(currentState).getColorMatrix()[j][k] == 2)
+                            v.setFill(Color.RED);
+                        if (states.get(currentState).getColorMatrix()[j][k] == 3)
+                            v.setFill(Color.GREEN);
+
+                        this.root.getChildren().add(v);
+                    }
+                }
+                else{
+                    Vertex v1 = this.graph.getVertices().get(j);
+                    Vertex v2 = this.graph.getVertices().get(k);
+                    if(v1 != null && v2 != null) {
+                        Edge e = this.graph.getEdge(v1, v2);
+                        if(e != null) {
+                            if (states.get(currentState).getColorMatrix()[j][k] == 0)
+                                e.setStroke(Color.GRAY);
+                            if (states.get(currentState).getColorMatrix()[j][k] == 1)
+                                e.setStroke(Color.BLACK);
+                            if (states.get(currentState).getColorMatrix()[j][k] == 2)
+                                e.setStroke(Color.RED);
+                            if (states.get(currentState).getColorMatrix()[j][k] == 3)
+                                e.setStroke(Color.GREEN);
+                            this.root.getChildren().add(e);
+                        }
+                    }
+                }
+            }
+            System.out.println(states.size());
+        }
+        currentState++;
     }
 }

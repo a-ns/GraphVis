@@ -1,13 +1,13 @@
 package Graph;
-
+/*
 import org.junit.Test;
 
 import static org.junit.Assert.*;
-
+*/
 /**
  * Created by Alex on 11/1/2016.
  */
-public class GraphTest {
+/*public class GraphTest {
 
     @Test
     public void testAddVertex() throws Exception {
@@ -55,4 +55,4 @@ public class GraphTest {
         graph.addVertex("5");
         assertNotEquals(null, graph.getVertex("5"));
     }
-}
+}*/
