@@ -12,7 +12,6 @@ import java.util.ArrayList;
  */
 public class DijkstraSP {
     private static int V; //# vertices
-    private String visitedNodes;
     private boolean[] visited;
     private ColorMatrix currentCM;
     private Graph currentState;
@@ -167,5 +166,10 @@ public class DijkstraSP {
         }
         return newCM;
     }
+
+    public ArrayList<ColorMatrix> getStates() {
+        return states;
+    }
+
 
 }
