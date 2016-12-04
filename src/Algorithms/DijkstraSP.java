@@ -7,7 +7,7 @@ import Graph.*;
 import java.util.ArrayList;
 
 /**
- * Created by Alex, adapted for this project by Mikayla on 11/27/2016.
+ * Algorithm implemented by alex, adapted for this project by Mikayla on 11/27/2016.
  *
  */
 public class DijkstraSP {
@@ -16,6 +16,7 @@ public class DijkstraSP {
     private ColorMatrix currentCM;
     private Graph currentState;
     private ArrayList<ColorMatrix> states;
+    private String shortestPath = "";
 
     public DijkstraSP(Graph g, Vertex startV, Vertex destV){
         int start = g.getVertices().indexOf(startV);
@@ -31,7 +32,6 @@ public class DijkstraSP {
         states.add(cm);
         currentCM = cm;
         dijkstra(g, start, dest);
-        states.add(backToBlack());
     }
 
     private void dijkstra(Graph g, int start, int dest){
@@ -51,9 +51,10 @@ public class DijkstraSP {
             /*
             highlight the new node showing we are visiting it
              */
-            ColorMatrix newCM = updateCM(this.currentCM, currentIndex, currentIndex);
-            states.add(newCM);
-            this.currentCM = newCM;
+            //ColorMatrix newCM = updateCM(this.currentCM, currentIndex, currentIndex);
+            //this.currentCM = newCM;
+            //states.add(newCM);
+
             for (int toV = 0; toV < V; toV++) {
                 /* 1. check if the toV (vertex) is not visited
                    2. if there is an edge from current to toV (0 in the graph indicates no edge)
@@ -65,6 +66,9 @@ public class DijkstraSP {
                         && distances[currentIndex] + g.toAdjacencyMatrix()[currentIndex][toV].getWeight() < distances[toV]) {
                     distances[toV] = distances[currentIndex] + g.toAdjacencyMatrix()[currentIndex][toV].getWeight();
                     prev[toV] = currentIndex; //this helps us "remember" the pathway to that vertex
+                    ColorMatrix cm = updateCM(this.currentCM, currentIndex, toV, true);
+                    this.currentCM = cm;
+                    states.add(cm);
                 }
             }
         }
@@ -73,8 +77,24 @@ public class DijkstraSP {
         }
         printSolution (distances, dest);
         printAllSolutions (distances, V);
-        printPath (prev, 4);
+        System.out.println("Printing path");
+        this.shortestPath = printPath (prev, dest+1);
+        states.add(highlightBestPath());
+    }
 
+    private ColorMatrix highlightBestPath() {
+        String[] path = this.shortestPath.split("-");
+        //remove current red colorings, make them black
+        ColorMatrix cm = backToBlack();
+        //highlight start node red
+        System.out.println("updating node " + Integer.parseInt(path[path.length-1]));
+        cm = updateCM(cm, Integer.parseInt(path[path.length-1]), Integer.parseInt(path[path.length-1]), false);
+        for(int i = path.length-1; i > 0; i--){
+            //update all other nodes and connecting edges red
+            System.out.println("updating node " + Integer.parseInt(path[i]) + " and " + Integer.parseInt(path[i-1]));
+            cm = updateCM(cm, Integer.parseInt(path[i]), Integer.parseInt(path[i-1]),false);
+        }
+        return cm;
     }
 
     private static int minimumDistance (boolean[] visited, int[] dist) {
@@ -99,7 +119,7 @@ public class DijkstraSP {
         System.out.println (n +  "    " + dist[n]);
     }
 
-    private static void printPath (int prev[], int n) {
+    private static String printPath (int prev[], int n) {
 
         int src = 0; //stupid compiler
         StringBuilder path = new StringBuilder();
@@ -108,15 +128,17 @@ public class DijkstraSP {
                 src = i;
                 break;
             }
-        System.out.println("Path from " + src + " to " + n);
-        int i = n;
+        System.out.println("Path from " + (src+1) + " to " + n);
+        int i = n-1;
         while (i != src) { //when i == src, then we're done finding our way back
             path.append(i + "-");
+            System.out.println("i = " + i + " src = " + src + " prev[i] = " + prev[i]);
             i = prev[i];
+            System.out.println("new i = " + prev[i]);
         }
         path.append(src);
         System.out.println (path.reverse().toString());
-
+        return path.reverse().toString();
     }
 
     /*
@@ -124,7 +146,7 @@ public class DijkstraSP {
 	Return a new colormatrix with the new values.
 	To be added to the states list back in depthFirstSearch method.
 	 */
-    private ColorMatrix updateCM(ColorMatrix cm, int currentNodeIndex, int i) {
+    private ColorMatrix updateCM(ColorMatrix cm, int currentNodeIndex, int i, boolean goBlack) {
         ColorMatrix newCM = new ColorMatrix(cm.getNumVertices());
         int[][] oldMatrix = cm.getColorMatrix();
 		/*
@@ -132,7 +154,7 @@ public class DijkstraSP {
 		 */
         for(int j = 0; j < cm.getNumVertices(); j++){
             for(int k = 0; k < cm.getNumVertices(); k++){
-                if(oldMatrix[j][k] == 2){
+                if(oldMatrix[j][k] == 2 && goBlack){
                     newCM.setColorMatrixAt(j, k, 1);
                 }
                 else newCM.setColorMatrixAt(j, k, oldMatrix[j][k]);
@@ -146,7 +168,7 @@ public class DijkstraSP {
             //not directed so update edge from i to currentNodeIndex also
             newCM.setColorMatrixAt(i, currentNodeIndex, 2); //set edge to highlighted
         }
-        newCM.setColorMatrixAt(i, i, 2); //set node to highlighted
+        newCM.setColorMatrixAt(i, i, 2); //set new node to highlighted
         return newCM;
     }
 
