@@ -63,7 +63,6 @@ public class Graph_Canvas_Controller {
     private CheckBox weighted;
 
     private Graph graph;
-    private Graph graph2;
     final String[] algorithms = new String[]{"dfs", "bfs", "kruskals", "dijkstras"};
     private String currentAlgorithm;
     private Stage stage;
@@ -92,7 +91,6 @@ public class Graph_Canvas_Controller {
     @FXML
     public void initialize () {
         this.graph = new Graph();
-        this.graph2 = new Graph();
         currentAlgorithm = "";
 
         timeline = new Timeline(new KeyFrame(

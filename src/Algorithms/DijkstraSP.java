@@ -34,6 +34,10 @@ public class DijkstraSP {
         dijkstra(g, start, dest);
     }
 
+    /*
+    Run Dijkstra's algorithm on the graph, searching for the dest vertex, starting at start vertex.
+    update the states arraylist each step through the algorithm.
+     */
     private void dijkstra(Graph g, int start, int dest){
         visited = new boolean[V];
         int[] distances = new int[V];
@@ -48,12 +52,6 @@ public class DijkstraSP {
         for(int fromV = 0; fromV < V - 1; fromV++){
             int currentIndex = minimumDistance(visited, distances); //find the next vertex to work on. starts with start vertex because we set it to zero.
             visited[currentIndex] = true; //mark the current node as visited so we don't keep doing it
-            /*
-            highlight the new node showing we are visiting it
-             */
-            //ColorMatrix newCM = updateCM(this.currentCM, currentIndex, currentIndex);
-            //this.currentCM = newCM;
-            //states.add(newCM);
 
             for (int toV = 0; toV < V; toV++) {
                 /* 1. check if the toV (vertex) is not visited
@@ -82,6 +80,9 @@ public class DijkstraSP {
         states.add(highlightBestPath());
     }
 
+    /*
+    highlight the shortest path created using dijkstra's algorithm. Represent it through the ColorMatrix
+     */
     private ColorMatrix highlightBestPath() {
         String[] path = this.shortestPath.split("-");
         //remove current red colorings, make them black
@@ -97,6 +98,9 @@ public class DijkstraSP {
         return cm;
     }
 
+    /*
+    calculate the index of the minimum distance so far
+     */
     private static int minimumDistance (boolean[] visited, int[] dist) {
         int minimum = Integer.MAX_VALUE;
         int indexOfMin = 0;
@@ -108,17 +112,25 @@ public class DijkstraSP {
         }
         return indexOfMin;
     }
-
+    /*
+    print all of the distances from start node to each node
+     */
     private static void printAllSolutions (int dist[], int n) {
         System.out.println ("Vertex   Distance from Source");
         for (int i = 0; i < V; i++)
             System.out.println (i + "    " + dist[i]);
     }
+    /*
+    print the distance required to travel to the destination from source node
+     */
     private static void printSolution (int dist[], int n) {
         System.out.println ("Vertex   Distance from Source");
         System.out.println (n +  "    " + dist[n]);
     }
 
+    /*
+    print the shortest path found using dijkstra's algorithm
+     */
     private static String printPath (int prev[], int n) {
 
         int src = 0; //stupid compiler
@@ -172,6 +184,9 @@ public class DijkstraSP {
         return newCM;
     }
 
+    /*
+        Turn all of the previously highlighted components back to black.
+     */
     private ColorMatrix backToBlack(){
         ColorMatrix newCM = new ColorMatrix(this.currentCM.getNumVertices());
         int[][] oldMatrix = this.currentCM.getColorMatrix();
@@ -189,6 +204,9 @@ public class DijkstraSP {
         return newCM;
     }
 
+    /*
+    return the states in the visualization represented by an arraylist of colormatrix objects
+     */
     public ArrayList<ColorMatrix> getStates() {
         return states;
     }

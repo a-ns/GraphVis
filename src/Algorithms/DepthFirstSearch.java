@@ -36,10 +36,17 @@ public class DepthFirstSearch{
 		return this.visitedNodes;
 	}
 
+	/*
+    return the states in the visualization represented by an arraylist of colormatrix objects
+     */
 	public ArrayList<ColorMatrix> getStates(){
 		return this.states;
 	}
 
+	/*
+	Perform a depth first traversal, updating the states with visualization info each step of the way.
+	Can be altered to do an actual search for targetNode.
+	 */
 	private void depthFirstSearch(Edge[][] adjMatrix, Vertex startNode, Vertex targetNode){
 		int currentNodeIndex = currentState.getVertices().indexOf(startNode);
 		visitedNodes = visitedNodes + " " + startNode.getValue();
@@ -96,6 +103,9 @@ public class DepthFirstSearch{
 		return newCM;
 	}
 
+	/*
+        Turn all of the previously highlighted components back to black.
+     */
 	private ColorMatrix backToBlack(){
 		ColorMatrix newCM = new ColorMatrix(this.currentCM.getNumVertices());
 		int[][] oldMatrix = this.currentCM.getColorMatrix();

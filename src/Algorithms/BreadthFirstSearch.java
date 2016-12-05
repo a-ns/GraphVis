@@ -34,6 +34,10 @@ public class BreadthFirstSearch {
         bfs(g.toAdjacencyMatrix(), startNode, targetNode);
         states.add(backToBlack());
     }
+    /*
+	Perform a breadth first traversal, updating the states with visualization info each step of the way.
+	Can be altered to do an actual search for targetNode.
+	 */
     private void bfs(Edge[][] adjMatrix, Vertex startNode, Vertex targetNode){
         int currentNodeIndex = currentState.getVertices().indexOf(startNode);
         visitedNodes = visitedNodes + startNode.getValue();
@@ -61,6 +65,11 @@ public class BreadthFirstSearch {
         }
     }
 
+    /*
+	Update the colormatrix to highlight the newly traversed edge and node.
+	Return a new colormatrix with the new values.
+	To be added to the states list back in depthFirstSearch method.
+	 */
     private ColorMatrix updateCM(ColorMatrix cm, int currentNodeIndex, int i) {
         ColorMatrix newCM = new ColorMatrix(cm.getNumVertices());
         int[][] oldMatrix = cm.getColorMatrix();
@@ -87,6 +96,9 @@ public class BreadthFirstSearch {
         return newCM;
     }
 
+    /*
+        Turn all of the previously highlighted components back to black.
+     */
     private ColorMatrix backToBlack(){
         ColorMatrix newCM = new ColorMatrix(this.currentCM.getNumVertices());
         int[][] oldMatrix = this.currentCM.getColorMatrix();
@@ -104,6 +116,9 @@ public class BreadthFirstSearch {
         return newCM;
     }
 
+    /*
+    return the states in the visualization represented by an arraylist of colormatrix objects
+     */
     public ArrayList<ColorMatrix> getStates() {
         return states;
     }
